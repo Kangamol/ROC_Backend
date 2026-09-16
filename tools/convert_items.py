@@ -89,7 +89,7 @@ def parse_card_loc(s):
 STAT_ALIASES = {
     'str':'str','agi':'agi','vit':'vit','int':'int','dex':'dex','luk':'luk','all stats':'allStats','all stat':'allStats',
     'atk':'atk','matk':'matk','def':'def','mdef':'mdef','hit':'hit','flee':'flee','crit':'crit','critical':'crit',
-    'perfect dodge':'perfectDodge','aspd':'aspd','maxhp':'maxHp','max hp':'maxHp','mhp':'maxHp','maxsp':'maxSp','max sp':'maxSp','msp':'maxSp',
+    'perfect dodge':'perfectDodge','cri':'crit','aspd':'aspd','maxhp':'maxHp','max hp':'maxHp','mhp':'maxHp','maxsp':'maxSp','max sp':'maxSp','msp':'maxSp',
     'hp':'maxHp','sp':'maxSp',
 }
 P_BONUS = re.compile(r'(?<![A-Za-z])(' + '|'.join(sorted(map(re.escape, STAT_ALIASES), key=len, reverse=True)) + r')\s*\+\s*(\d+)\s*(%?)', re.I)
@@ -155,6 +155,25 @@ def parse_bonuses(lines):
     if by_each: cond['perRefine'] = [{'every': k, 'bonuses': v} for k, v in sorted(by_each.items())]
     return plain, cond
 
+# --- costume enchant stones ("STR Stone (Upper)", "ATK Stone (Middle)" ...) ----
+# ETC items that slot into a costume piece; position comes from the name or the
+# description ("Costume ส่วน Upper", "Slot ของ Upper Costume").
+_STONE_POS = {'upper': 'COSTUME_TOP', 'top': 'COSTUME_TOP', 'middle': 'COSTUME_MID', 'mid': 'COSTUME_MID',
+              'lower': 'COSTUME_LOW', 'low': 'COSTUME_LOW', 'garment': 'COSTUME_GARMENT', 'robe': 'COSTUME_GARMENT'}
+P_STONE_NAME = re.compile(r'stone.*\((upper|middle|lower|garment|top|mid|low|robe)\)', re.I)
+P_STONE_DESC = re.compile(r'(?:costume\s*(?:ส่วน)?\s*(upper|middle|lower|garment)|(upper|middle|lower|garment)\s*costume)', re.I)
+
+def costume_stone_location(name, text):
+    if not re.search(r'stone|หิน', name, re.I) or not re.search(r'costume|คอสตูม', text, re.I):
+        return None
+    m = P_STONE_NAME.search(name)
+    if m:
+        return _STONE_POS.get(m.group(1).lower())
+    m = P_STONE_DESC.search(text)
+    if m:
+        return _STONE_POS.get((m.group(1) or m.group(2)).lower())
+    return None
+
 def classify(item_id, typ, head_locs, card_loc):
     """Return (itemType, subType, equipLocations)."""
     t = norm_type(typ)
@@ -205,8 +224,11 @@ def main():
         head_locs = parse_head_loc(grab(text, P_HLOC))
         card_loc = parse_card_loc(grab(text, P_CLOC))
         item_type, sub_type, locs = classify(item_id, typ, head_locs, card_loc)
+        stone_loc = costume_stone_location(v.get('identifiedDisplayName', ''), text) if item_type == 'ETC' else None
+        if stone_loc:
+            sub_type, card_loc = 'COSTUME_STONE', stone_loc
         jobs = grab(text, P_JOBS)
-        bonuses, cond = parse_bonuses(lines) if item_type in ('WEAPON','ARMOR','CARD','COSTUME','SHADOW') else ({}, {})
+        bonuses, cond = parse_bonuses(lines) if item_type in ('WEAPON','ARMOR','CARD','COSTUME','SHADOW') or stone_loc else ({}, {})
         rec = {
             'id': item_id,
             'name': v.get('identifiedDisplayName', ''),
@@ -221,7 +243,7 @@ def main():
             'subType': sub_type,
             'typeLabel': typ,
             'equipLocations': locs,
-            'cardLocation': card_loc if item_type == 'CARD' else None,
+            'cardLocation': card_loc if item_type == 'CARD' or stone_loc else None,
             'atk': grab(text, P_ATK, int),
             'matk': grab(text, P_MATK, int),
             'def': grab(text, P_DEF, int),
