@@ -1,0 +1,17 @@
+# RO client files (multi-GB, not redistributable)
+RagnarokClassic.zip
+client/
+
+# generated data (rebuild with tools/)
+data/items_raw.json
+public/assets/
+
+# runtime
+node_modules/
+.env
+dist/
+data/grf_index.json
+
+# frontend lives in its own repo (ROC_FrontEnd)
+web/
+.DS_Store

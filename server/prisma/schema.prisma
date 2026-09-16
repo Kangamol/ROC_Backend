@@ -1,0 +1,129 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Broad category derived from the client description (see tools/convert_items.py).
+enum ItemType {
+  WEAPON
+  ARMOR
+  CARD
+  AMMO
+  CONSUMABLE
+  COSTUME
+  SHADOW
+  PET_EGG
+  ETC
+}
+
+/// One row per entry in the client's iteminfo_new.lub. Cards live here too
+/// (itemType = CARD) so equipment slots can reference them with a single FK.
+model Item {
+  id                       Int      @id
+  name                     String
+  unidentifiedName         String?
+  resourceName             String
+  unidentifiedResourceName String?
+  slotCount                Int      @default(0)
+  /// ClassNum in the client — sprite view id used for visual rendering (0 = none).
+  viewId                   Int      @default(0)
+  isCostume                Boolean  @default(false)
+  effectId                 Int?
+
+  itemType  ItemType
+  /// Finer type: DAGGER, SWORD_1H, HEADGEAR, ACCESSORY, ... (UNKNOWN when unparsable)
+  subType   String
+  /// Raw "ประเภท :" label from the description, kept for debugging the parser.
+  typeLabel String?
+  /// Slots this item can be worn in: WEAPON, SHIELD, ARMOR, HEAD_TOP, HEAD_MID, HEAD_LOW,
+  /// GARMENT, SHOES, ACCESSORY_1, ACCESSORY_2, AMMO, COSTUME_*, SHADOW.
+  equipLocations String[]
+  /// For cards: which equipment type the card compounds into.
+  cardLocation   String?
+
+  atk           Int?
+  matk          Int?
+  def           Int?
+  weight        Int?
+  weaponLevel   Int?
+  requiredLevel Int?
+  element       String?
+  /// Raw job restriction text from the client (Thai/English mix).
+  jobs          String?
+
+  description      String   @db.Text
+  descriptionLines Json
+  /// Heuristically parsed bonuses, e.g. {"str": 2, "atkPercent": 5}
+  bonuses          Json
+
+  hasIcon       Boolean @default(false)
+  hasCollection Boolean @default(false)
+
+  equippedIn EquipmentSlot[] @relation("SlotItem")
+  asCard1    EquipmentSlot[] @relation("SlotCard1")
+  asCard2    EquipmentSlot[] @relation("SlotCard2")
+  asCard3    EquipmentSlot[] @relation("SlotCard3")
+  asCard4    EquipmentSlot[] @relation("SlotCard4")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([itemType])
+  @@index([subType])
+  @@index([name])
+}
+
+model CharacterBuild {
+  id        String @id @default(uuid())
+  shareCode String @unique
+  title     String
+  jobClass  String
+  baseLevel Int    @default(99)
+  jobLevel  Int    @default(50)
+
+  // appearance for the visual preview
+  gender     String @default("M")
+  hairStyle  Int    @default(1)
+  hairColor  Int    @default(0)
+  clothColor Int    @default(0)
+
+  str Int @default(1)
+  agi Int @default(1)
+  vit Int @default(1)
+  int Int @default(1)
+  dex Int @default(1)
+  luk Int @default(1)
+
+  slots EquipmentSlot[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model EquipmentSlot {
+  id      String         @id @default(uuid())
+  buildId String
+  build   CharacterBuild @relation(fields: [buildId], references: [id], onDelete: Cascade)
+
+  /// Same vocabulary as Item.equipLocations
+  location    String
+  refineLevel Int    @default(0)
+
+  itemId Int?
+  item   Item? @relation("SlotItem", fields: [itemId], references: [id])
+
+  card1Id Int?
+  card1   Item? @relation("SlotCard1", fields: [card1Id], references: [id])
+  card2Id Int?
+  card2   Item? @relation("SlotCard2", fields: [card2Id], references: [id])
+  card3Id Int?
+  card3   Item? @relation("SlotCard3", fields: [card3Id], references: [id])
+  card4Id Int?
+  card4   Item? @relation("SlotCard4", fields: [card4Id], references: [id])
+
+  @@unique([buildId, location])
+}

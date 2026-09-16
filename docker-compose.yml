@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: ro_simulator_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ro
+      POSTGRES_PASSWORD: ro
+      POSTGRES_DB: ro_simulator
+    ports:
+      - "5432:5432"
+    volumes:
+      - ro_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ro -d ro_simulator"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  ro_pgdata:
