@@ -57,8 +57,10 @@ model Item {
 
   description      String   @db.Text
   descriptionLines Json
-  /// Heuristically parsed bonuses, e.g. {"str": 2, "atkPercent": 5}
+  /// Heuristically parsed bonuses, e.g. {"str": 2, "atkPercent": 5, "variableCastPercent": 10}
   bonuses          Json
+  /// Refine-conditional bonuses: {"refine":[{"min":7,"bonuses":{...}}], "perRefine":[{"every":2,"bonuses":{...}}]}
+  conditionalBonuses Json @default("{}")
 
   hasIcon       Boolean @default(false)
   hasCollection Boolean @default(false)

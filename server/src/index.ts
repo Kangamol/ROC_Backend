@@ -28,6 +28,7 @@ const listSelect = {
   requiredLevel: true,
   element: true,
   bonuses: true,
+  conditionalBonuses: true,
   hasIcon: true,
   viewId: true,
 } satisfies Prisma.ItemSelect;

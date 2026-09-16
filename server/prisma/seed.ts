@@ -36,6 +36,7 @@ type RawItem = {
   description: string;
   descriptionRaw: string[];
   bonuses: Record<string, number>;
+  conditionalBonuses: Prisma.InputJsonObject;
 };
 
 async function main() {
@@ -75,17 +76,21 @@ async function main() {
     description: it.description,
     descriptionLines: it.descriptionRaw,
     bonuses: it.bonuses,
+    conditionalBonuses: it.conditionalBonuses ?? {},
     hasIcon: existsSync(resolve(ASSETS, "items", `${it.id}.png`)),
     hasCollection: existsSync(resolve(ASSETS, "collection", `${it.id}.png`)),
   }));
 
-  let inserted = 0;
+  // Upsert so re-running after a parser change refreshes existing rows without
+  // touching saved builds (they reference items by id).
+  const before = await prisma.item.count();
   for (let i = 0; i < rows.length; i += CHUNK) {
-    const res = await prisma.item.createMany({ data: rows.slice(i, i + CHUNK), skipDuplicates: true });
-    inserted += res.count;
+    await prisma.$transaction(
+      rows.slice(i, i + CHUNK).map((row) => prisma.item.upsert({ where: { id: row.id }, create: row, update: row })),
+    );
   }
   const total = await prisma.item.count();
-  console.log(`inserted ${inserted} new rows; Item table now has ${total} rows`);
+  console.log(`upserted ${rows.length} items (${total - before} new); Item table now has ${total} rows`);
 }
 
 main()
