@@ -75,10 +75,13 @@ def parse_head_loc(s):
 def parse_card_loc(s):
     if not s: return None
     s = s.lower()
-    for k, v in [('weapon','WEAPON'),('armor','ARMOR'),('shield','SHIELD'),('garment','GARMENT'),
-                 ('foot','SHOES'),('shoe','SHOES'),('accessory (right)','ACCESSORY_R'),('accessory(right)','ACCESSORY_R'),
-                 ('accessory (left)','ACCESSORY_L'),('accessory(left)','ACCESSORY_L'),('accessory','ACCESSORY'),
-                 ('headgear','HEADGEAR'),('helm','HEADGEAR'),('ทุกสล็อต','ANY')]:
+    for k, v in [('weapon','WEAPON'),('อาวุธ','WEAPON'),('armor','ARMOR'),('เกราะ','ARMOR'),('ชุดเกราะ','ARMOR'),
+                 ('shield','SHIELD'),('โล่','SHIELD'),('garment','GARMENT'),('ผ้าคลุม','GARMENT'),('เสื้อคลุม','GARMENT'),
+                 ('foot','SHOES'),('shoe','SHOES'),('boot','SHOES'),('รองเท้า','SHOES'),
+                 ('accessory (right)','ACCESSORY_R'),('accessory(right)','ACCESSORY_R'),
+                 ('accessory (left)','ACCESSORY_L'),('accessory(left)','ACCESSORY_L'),('accessory','ACCESSORY'),('accessary','ACCESSORY'),('เครื่องประดับ','ACCESSORY'),
+                 ('headgear','HEADGEAR'),('helm','HEADGEAR'),('head','HEADGEAR'),('หมวก','HEADGEAR'),('ศีรษะ','HEADGEAR'),
+                 ('ทุกสล็อต','ANY'),('ทุก slot','ANY'),('all slot','ANY')]:
         if k in s: return v
     return None
 
@@ -141,6 +144,9 @@ def classify(item_id, typ, head_locs, card_loc):
     if 1750 <= item_id < 1800 or 13200 <= item_id < 13300: return 'AMMO', 'UNKNOWN', ['AMMO']
     return 'ETC', 'ETC', []
 
+FALLBACK = ROOT / 'data' / 'card_location_fallback.json'
+CARD_LOC_FALLBACK = json.load(open(FALLBACK, encoding='utf-8')) if FALLBACK.exists() else {}
+
 def main():
     raw = json.load(open(SRC, encoding='utf-8'))
     items, stats = [], collections.Counter()
@@ -152,6 +158,19 @@ def main():
         typ = grab(text, P_TYPE)
         head_locs = parse_head_loc(grab(text, P_HLOC))
         card_loc = parse_card_loc(grab(text, P_CLOC))
+        if card_loc is None and ((typ or '').strip().lower() in ('card', 'การ์ด') or 4000 <= item_id < 5000):
+            # cards use many label spellings ("ประเภท : Accessory", "อาชีพ : Footwear", "ส่วนที่ใส่ : Armor"):
+            # take the first "label : value" whose value is an equip position
+            for m in re.finditer(r'[^\n:]{1,24}\s*:\s*([^\n:]{2,40})', text):
+                loc = parse_card_loc(m.group(1))
+                if loc and m.group(1).strip().lower() not in ('card', 'การ์ด'):
+                    card_loc = loc
+                    break
+            if card_loc is None and 4700 <= item_id < 5000:
+                card_loc = 'ANY'  # enchant "cards" (STR+1 ...) go into any free slot
+            if card_loc is None:
+                card_loc = CARD_LOC_FALLBACK.get(str(item_id))  # rAthena (drop cards match the official DB)
+                if card_loc: stats['cardLocation_from_rathena'] += 1
         item_type, sub_type, locs = classify(item_id, typ, head_locs, card_loc)
         stone_loc = costume_stone_location(v.get('identifiedDisplayName', ''), text) if item_type == 'ETC' else None
         if stone_loc:

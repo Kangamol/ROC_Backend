@@ -38,3 +38,10 @@ RagnarokClassic.zip
    those tables are CP949, not UTF-8 — the dump step transcodes them).
 - GRF flag 4 ("DES") only encrypts the first 20 blocks; flag 2 is mixcrypt. Both handled in `grf.py`.
 - `tools/sprite.py` is the Python reference parser used to validate anchors (see the 8-direction test).
+
+## Card compound position
+
+`convert_items.py` reads the card's position from any `label : value` pair in the description (the client
+uses ~10 spellings: "ใช้กับ", "ติดตั้ง", "Slot", "Location", "Device", "ส่วนที่ใส่", Thai words like รองเท้า/อาวุธ…).
+Cards that still have no position fall back to `data/card_location_fallback.json` (derived from rAthena
+`item_db_etc.yml`, position only — never stats). IDs 4700–4999 are enchant "cards" → `ANY`.
