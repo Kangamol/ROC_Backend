@@ -59,8 +59,11 @@ model Item {
   descriptionLines Json
   /// Heuristically parsed bonuses, e.g. {"str": 2, "atkPercent": 5, "variableCastPercent": 10}
   bonuses          Json
-  /// Refine-conditional bonuses: {"refine":[{"min":7,"bonuses":{...}}], "perRefine":[{"every":2,"bonuses":{...}}]}
+  /// Conditional bonuses: {"refine":[{min,bonuses}], "perRefine":[{every,bonuses}],
+  /// "perStat":[{stat,every,max,bonuses}], "set":[{requires:[names],bonuses}]}
   conditionalBonuses Json @default("{}")
+  /// Description lines that look like effects but the parser could not read (shown in the UI as "not counted")
+  unparsedLines Json @default("[]")
 
   hasIcon       Boolean @default(false)
   hasCollection Boolean @default(false)

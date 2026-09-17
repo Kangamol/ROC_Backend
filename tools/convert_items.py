@@ -8,6 +8,7 @@ so it can be seeded straight into the database.
 """
 import json, re, sys, collections
 from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / 'data' / 'items_raw.json'
@@ -81,79 +82,7 @@ def parse_card_loc(s):
         if k in s: return v
     return None
 
-# --- bonus parser -----------------------------------------------------------
-# Unconditional lines: "STR + 2", "MaxHP + 10%", "ลด Variable Cast Time 10%" ...
-# Refine-conditional lines ("เมื่ออัพเกรดถึงขั้น 7 ...", "ทุก ๆ การอัพเกรด 2 ขั้น ...")
-# are kept separately so the stat engine can apply them per slot refine level.
-# Set bonuses and skill-specific effects are skipped on purpose.
-STAT_ALIASES = {
-    'str':'str','agi':'agi','vit':'vit','int':'int','dex':'dex','luk':'luk','all stats':'allStats','all stat':'allStats',
-    'atk':'atk','matk':'matk','def':'def','mdef':'mdef','hit':'hit','flee':'flee','crit':'crit','critical':'crit',
-    'perfect dodge':'perfectDodge','cri':'crit','aspd':'aspd','maxhp':'maxHp','max hp':'maxHp','mhp':'maxHp','maxsp':'maxSp','max sp':'maxSp','msp':'maxSp',
-    'hp':'maxHp','sp':'maxSp',
-}
-P_BONUS = re.compile(r'(?<![A-Za-z])(' + '|'.join(sorted(map(re.escape, STAT_ALIASES), key=len, reverse=True)) + r')\s*\+\s*(\d+)\s*(%?)', re.I)
-
-# cast time / after-cast delay (reductions are stored as positive numbers)
-_CAST = r'(?:Variable\s*Cast\s*Time|(?:ระยะ)?เวลา(?:ใน)?(?:การ)?ร่าย(?:เวทย์|เวทมนตร์|สกิล|คาถา)?(?:แบบแปรผัน)?)'
-P_VCT_DOWN = re.compile(r'(?:ลด\s*' + _CAST + r'|' + _CAST + r'\s*ลดลง)\s*(?:ลง(?:อีก)?)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
-P_VCT_UP   = re.compile(r'เพิ่ม\s*' + _CAST + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
-P_FCT_DOWN = re.compile(r'ลด\s*(?:Fixed\s*Cast\s*Time|ระยะเวลาร่ายแบบคงที่)\s*(?:ลง)?\s*(\d+(?:\.\d+)?)\s*(วินาที|%)', re.I)
-_ACD = r'(?:After\s*Cast\s*Delay|(?:สกิล)?(?:Delay|ดีเลย์)(?:\s*หลัง(?:จาก)?ใช้สกิล)?)'
-P_ACD_DOWN = re.compile(r'(?:ลด\s*' + _ACD + r'|' + _ACD + r'\s*ลดลง)\s*(?:ลง(?:อีก)?)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
-P_ACD_UP   = re.compile(r'เพิ่ม\s*' + _ACD + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
-
-P_COND_MIN  = re.compile(r'(?:เมื่ออัพเกรด(?:ถึง)?ขั้น|อัพเกรดตั้งแต่ขั้น|เมื่อขั้นอัพเกรด(?:ตั้งแต่)?|เมื่อ\s*\+|ที่ระดับ\s*\+|เมื่อตีบวก(?:ถึง)?\s*\+?)\s*(\d+)')
-P_COND_EACH = re.compile(r'ทุก\s*ๆ?\s*(?:การ)?(?:อัพเกรด|ตีบวก)\s*(\d+)\s*ขั้น')
-P_SKIP = re.compile(r'เซ็ต|เซต|ร่วมกัน|ด้วยกัน|ผลรวม|Global Cooldown|หลังโจมตี|ของสกิล|ให้กับสกิล|สกิล\s*\[|เรียนรู้สกิล', re.I)
-
-def _num(v):
-    f = float(v)
-    return int(f) if f.is_integer() else f
-
-def _add(out, key, val):
-    out[key] = _num((out.get(key, 0) + val))
-
-def parse_bonus_line(line):
-    out = {}
-    for m in P_BONUS.finditer(line):
-        key = STAT_ALIASES[m.group(1).lower()]
-        if m.group(3): key += 'Percent'
-        _add(out, key, int(m.group(2)))
-    if P_SKIP.search(line):
-        return out
-    for m in P_VCT_DOWN.finditer(line): _add(out, 'variableCastPercent', float(m.group(1)))
-    for m in P_VCT_UP.finditer(line):   _add(out, 'variableCastPercent', -float(m.group(1)))
-    for m in P_FCT_DOWN.finditer(line):
-        _add(out, 'fixedCastPercent' if m.group(2) == '%' else 'fixedCastSeconds', float(m.group(1)))
-    for m in P_ACD_DOWN.finditer(line): _add(out, 'afterCastDelayPercent', float(m.group(1)))
-    for m in P_ACD_UP.finditer(line):   _add(out, 'afterCastDelayPercent', -float(m.group(1)))
-    return out
-
-def parse_bonuses(lines):
-    """Return (bonuses, conditional) where conditional = {'refine': [{min, bonuses}], 'perRefine': [{every, bonuses}]}."""
-    plain, by_min, by_each = {}, {}, {}
-    in_set = False
-    for line in lines:
-        # "[Set] ..." / "เมื่อสวมใส่ ... ร่วมกัน" starts a set-bonus block that runs until the type line
-        if re.search(r'^\s*\[Set\]|เซ็ต|เซต|ร่วมกัน|ด้วยกัน', line):
-            in_set = True
-            continue  # set bonuses need the other pieces — not counted
-        if line.startswith('ประเภท'):
-            in_set = False
-        if in_set:
-            continue
-        b = parse_bonus_line(line)
-        if not b:
-            continue
-        m_each = P_COND_EACH.search(line)
-        m_min = P_COND_MIN.search(line)
-        target = by_each.setdefault(int(m_each.group(1)), {}) if m_each else by_min.setdefault(int(m_min.group(1)), {}) if m_min else plain
-        for k, v in b.items(): _add(target, k, v)
-    cond = {}
-    if by_min: cond['refine'] = [{'min': k, 'bonuses': v} for k, v in sorted(by_min.items())]
-    if by_each: cond['perRefine'] = [{'every': k, 'bonuses': v} for k, v in sorted(by_each.items())]
-    return plain, cond
+from effects import parse_effects
 
 # --- costume enchant stones ("STR Stone (Upper)", "ATK Stone (Middle)" ...) ----
 # ETC items that slot into a costume piece; position comes from the name or the
@@ -228,7 +157,7 @@ def main():
         if stone_loc:
             sub_type, card_loc = 'COSTUME_STONE', stone_loc
         jobs = grab(text, P_JOBS)
-        bonuses, cond = parse_bonuses(lines) if item_type in ('WEAPON','ARMOR','CARD','COSTUME','SHADOW') or stone_loc else ({}, {})
+        bonuses, cond, unparsed = parse_effects(lines) if item_type in ('WEAPON','ARMOR','CARD','COSTUME','SHADOW') or stone_loc else ({}, {}, [])
         rec = {
             'id': item_id,
             'name': v.get('identifiedDisplayName', ''),
@@ -256,6 +185,7 @@ def main():
             'descriptionRaw': v.get('identifiedDescriptionName', []),
             'bonuses': bonuses,
             'conditionalBonuses': cond,
+            'unparsedLines': unparsed,
         }
         items.append(rec)
         stats[item_type] += 1
