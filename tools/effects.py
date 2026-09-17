@@ -8,6 +8,8 @@ Output of parse_effects(lines):
                 perStat:   [{stat, every, max, bonuses}],  bonuses * floor(baseStat / every)
                 set:       [{requires: [names], bonuses}]}  all named items must be worn
     unparsed   [line]   lines that look like effects but nothing was extracted
+    parsed     [line]   lines that produced unconditional effects
+    conditional[line]   lines that produced effects under a condition (refine / stat / set)
 
 Keys are flat strings so the stat engine can just sum them; targeted effects
 embed the target: "physDamage:race:demihuman", "resist:element:neutral",
@@ -229,7 +231,7 @@ def _set_names(cond_line):
 
 def parse_effects(lines):
     plain, by_min, by_each, by_stat, by_set = {}, {}, {}, {}, {}
-    unparsed = []
+    unparsed, parsed, conditional = [], [], []
     active = None          # ('min', 5) | ('each', 2) | ('stat', 'VIT', 10, cap) | ('set', names)
     active_block = False   # True while the header's block continues on following lines
 
@@ -280,6 +282,7 @@ def parse_effects(lines):
         if 'variableCastPercent:perRefine' in effects:
             v = effects.pop('variableCastPercent:perRefine')
             _add(by_each.setdefault(1, {}), 'variableCastPercent', v)
+            conditional.append(line)
 
         if cond is not None:
             if cond[0] == 'skip':
@@ -289,14 +292,17 @@ def parse_effects(lines):
                 # condition + bonus on the same line; block continues only if the line ends with ','
                 tgt = target_for(cond)
                 for k, v in effects.items(): _add(tgt, k, v)
+                conditional.append(line)
                 active, active_block = (cond, True) if line.rstrip().endswith(',') else (None, False)
             else:
                 active, active_block = cond, True  # header line: following lines belong to it
+                conditional.append(line)
             continue
 
         if effects:
             tgt = target_for(active) if active_block else plain
             for k, v in effects.items(): _add(tgt, k, v)
+            (conditional if active_block else parsed).append(line)
             if active_block and not line.rstrip().endswith(','):
                 # a block line that does not continue with ',' may still be followed by more block
                 # lines (Pink Shampoo Hat); keep the block until a new header / blank / type line
@@ -310,4 +316,4 @@ def parse_effects(lines):
     if by_each: cond['perRefine'] = [{'every': k, 'bonuses': v} for k, v in sorted(by_each.items()) if v]
     if by_stat: cond['perStat'] = [{'stat': s, 'every': e, 'max': c, 'bonuses': v} for (s, e, c), v in by_stat.items() if v]
     if by_set: cond['set'] = [{'requires': list(k), 'bonuses': v} for k, v in by_set.items() if v]
-    return plain, cond, unparsed
+    return plain, cond, unparsed, parsed, conditional

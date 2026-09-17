@@ -38,6 +38,8 @@ type RawItem = {
   bonuses: Record<string, number>;
   conditionalBonuses: Prisma.InputJsonObject;
   unparsedLines: string[];
+  parsedLines: string[];
+  conditionalLines: string[];
 };
 
 async function main() {
@@ -79,6 +81,8 @@ async function main() {
     bonuses: it.bonuses,
     conditionalBonuses: it.conditionalBonuses ?? {},
     unparsedLines: it.unparsedLines ?? [],
+    parsedLines: it.parsedLines ?? [],
+    conditionalLines: it.conditionalLines ?? [],
     hasIcon: existsSync(resolve(ASSETS, "items", `${it.id}.png`)),
     hasCollection: existsSync(resolve(ASSETS, "collection", `${it.id}.png`)),
   }));

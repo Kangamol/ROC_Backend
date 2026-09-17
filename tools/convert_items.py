@@ -157,7 +157,7 @@ def main():
         if stone_loc:
             sub_type, card_loc = 'COSTUME_STONE', stone_loc
         jobs = grab(text, P_JOBS)
-        bonuses, cond, unparsed = parse_effects(lines) if item_type in ('WEAPON','ARMOR','CARD','COSTUME','SHADOW') or stone_loc else ({}, {}, [])
+        bonuses, cond, unparsed, parsed, conditional = parse_effects(lines) if item_type in ('WEAPON','ARMOR','CARD','COSTUME','SHADOW') or stone_loc else ({}, {}, [], [], [])
         rec = {
             'id': item_id,
             'name': v.get('identifiedDisplayName', ''),
@@ -186,6 +186,8 @@ def main():
             'bonuses': bonuses,
             'conditionalBonuses': cond,
             'unparsedLines': unparsed,
+            'parsedLines': parsed,
+            'conditionalLines': conditional,
         }
         items.append(rec)
         stats[item_type] += 1

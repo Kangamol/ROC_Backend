@@ -64,6 +64,9 @@ model Item {
   conditionalBonuses Json @default("{}")
   /// Description lines that look like effects but the parser could not read (shown in the UI as "not counted")
   unparsedLines Json @default("[]")
+  /// Description lines that produced unconditional / conditional effects (for tooltip highlighting)
+  parsedLines      Json @default("[]")
+  conditionalLines Json @default("[]")
 
   hasIcon       Boolean @default(false)
   hasCollection Boolean @default(false)
