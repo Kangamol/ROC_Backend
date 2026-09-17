@@ -15,3 +15,6 @@ data/grf_index.json
 # frontend lives in its own repo (ROC_FrontEnd)
 web/
 .DS_Store
+
+# Excel lock files
+~$*
