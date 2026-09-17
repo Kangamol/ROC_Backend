@@ -60,6 +60,7 @@ equipment in the same position. Weapons/shields are not rendered yet.
 
 | Method | Path | Notes |
 |---|---|---|
+| GET | `/api/jobs` | per-job base HP/SP per level, ASPD per weapon, job-level stat bonuses, max weight (`data/jobs.json`, built by `tools/build_job_data.py` from rAthena **pre-re** job tables — job data only, never items) |
 | GET | `/api/meta` | counts per itemType / equipLocation |
 | GET | `/api/items` | `search`, `type`, `subType`, `location`, `cardLocation`, `slots`, `limit`, `offset` |
 | GET | `/api/items/:id` | full item incl. description + parsed bonuses |

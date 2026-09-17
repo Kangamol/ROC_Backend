@@ -64,11 +64,17 @@ const buildBody = t.Object({
   ),
 });
 
+// Per-job tables (base HP/SP, ASPD, job-level stat bonuses) built by tools/build_job_data.py
+const JOBS_PATH = resolve(import.meta.dir, "../../data/jobs.json");
+const jobs: Record<string, unknown> = (await Bun.file(JOBS_PATH).exists()) ? await Bun.file(JOBS_PATH).json() : {};
+if (!Object.keys(jobs).length) console.warn(`jobs: ${JOBS_PATH} missing — run tools/build_job_data.py (engine falls back to approximations)`);
+
 const app = new Elysia()
   .use(cors())
   .use(staticPlugin({ assets: ASSETS_DIR, prefix: "/assets" }))
   .use(spriteRoutes)
   .get("/api/health", () => ({ ok: true }))
+  .get("/api/jobs", () => jobs)
 
   // ---- meta ---------------------------------------------------------------
   .get("/api/meta", async () => {
