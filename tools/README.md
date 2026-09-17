@@ -45,3 +45,14 @@ RagnarokClassic.zip
 uses ~10 spellings: "ใช้กับ", "ติดตั้ง", "Slot", "Location", "Device", "ส่วนที่ใส่", Thai words like รองเท้า/อาวุธ…).
 Cards that still have no position fall back to `data/card_location_fallback.json` (derived from rAthena
 `item_db_etc.yml`, position only — never stats). IDs 4700–4999 are enchant "cards" → `ANY`.
+
+## Costume position / enchant stones
+
+- Costume position comes from `ใช้สำหรับ / ตำแหน่ง / ตำแหน่งที่สวมใส่ : Upper|Middle|Lower|Garment` (plus a few Thai/typo
+  variants); items whose description says `ประเภท : Garment` but carry the client's `costume = true` flag are
+  costume garments, not garments. The `ประเภท` regex stops at any Thai word (`ป้องกัน`, `โจมตี` …) — the old
+  version silently dropped ~440 type labels and fell back to ID ranges.
+- Costume enchant stones (`subType = COSTUME_STONE`, `cardLocation = COSTUME_*`) are ETC items whose name ends in
+  `(Upper|Middle|Lower|Garment)` — job stones, `Change STR (Middle)`, visual `... Effect (Middle)` / `Footprint (Garment)`.
+  The client also carries the slotted-card form of every stone (IDs 29xxx / 310xxx); those are only kept when no
+  ETC stone with the same name exists (11 such: `ATK + 1% (Upper)`, `Fatal (Garment)`, `Reload Stone (…)` …).
