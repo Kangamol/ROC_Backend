@@ -54,7 +54,7 @@ const buildBody = t.Object({
   slots: t.Array(
     t.Object({
       location: t.String(),
-      refineLevel: t.Integer({ minimum: 0, maximum: 20, default: 0 }),
+      refineLevel: t.Integer({ minimum: 0, maximum: 15, default: 0 }),
       itemId: t.Optional(t.Nullable(t.Integer())),
       card1Id: t.Optional(t.Nullable(t.Integer())),
       card2Id: t.Optional(t.Nullable(t.Integer())),

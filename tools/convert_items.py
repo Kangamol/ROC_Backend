@@ -58,6 +58,7 @@ ARMOR_TYPES = {
     'headgear':'HEADGEAR','helm':'HEADGEAR','hat':'HEADGEAR',
     'costume':'COSTUME','shadow':'SHADOW','shadow equipment':'SHADOW',
 }
+TWO_HANDED = {'SWORD_2H','SPEAR_2H','AXE_2H','STAFF_2H','BOW','KATAR','INSTRUMENT','WHIP','HUUMA','RIFLE','SHOTGUN','GATLING','GRENADE_LAUNCHER'}
 AMMO_TYPES = {'arrow':'ARROW','bullet':'BULLET','throwing weapon':'THROW','shell':'SHELL','grenade shell':'SHELL','kunai':'KUNAI','shuriken':'SHURIKEN','cannon ball':'CANNONBALL'}
 
 def norm_type(t):
@@ -144,6 +145,8 @@ def classify(item_id, typ, head_locs, card_loc):
     if 1750 <= item_id < 1800 or 13200 <= item_id < 13300: return 'AMMO', 'UNKNOWN', ['AMMO']
     return 'ETC', 'ETC', []
 
+OVERRIDES = ROOT / 'data' / 'manual_overrides.json'   # from tools/export_review.py --import
+MANUAL = json.load(open(OVERRIDES, encoding='utf-8')) if OVERRIDES.exists() else {}
 FALLBACK = ROOT / 'data' / 'card_location_fallback.json'
 CARD_LOC_FALLBACK = json.load(open(FALLBACK, encoding='utf-8')) if FALLBACK.exists() else {}
 
@@ -208,6 +211,12 @@ def main():
             'parsedLines': parsed,
             'conditionalLines': conditional,
         }
+        fix = MANUAL.get(sid)
+        if fix:
+            rec.update({k: v for k, v in fix.items() if k in rec})
+            if 'subType' in fix and rec['itemType'] == 'WEAPON':
+                rec['equipLocations'] = ['WEAPON', 'SHIELD'] if fix['subType'] in TWO_HANDED else ['WEAPON']
+            stats['manual_override'] += 1
         items.append(rec)
         stats[item_type] += 1
     items.sort(key=lambda r: r['id'])

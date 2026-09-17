@@ -92,7 +92,8 @@ def _add(out, key, val):
 def _kind(line):
     """physical / magic / both for damage-type lines."""
     magic = re.search(r'เวทมนตร์|เวทย์|magic', line, re.I)
-    phys = re.search(r'กายภาพ|physical|โจมตี', line, re.I)
+    # "โจมตี" alone is generic; only count it as physical when no magic wording is present
+    phys = re.search(r'กายภาพ|physical', line, re.I) or (not magic and re.search(r'โจมตี', line))
     if magic and phys: return 'both'
     if magic: return 'magic'
     return 'phys'
@@ -113,6 +114,45 @@ def _target(line):
     if re.search(r'ทุกธาตุ', line): return 'element', 'all'
     if re.search(r'ศัตรู|เป้าหมาย|มอนสเตอร์', line): return 'race', 'all'
     return None, None
+
+def _targets(line):
+    """All targets named in one line, e.g. "เผ่า Demon, Undead และธาตุ Undead, Shadow" →
+    [race:demon, race:undead, element:undead, element:shadow]. Falls back to _target()."""
+    out = []
+    if P_SKILL.search(line) and not re.search(r'สามารถใช้', line):
+        # "สกิล A, B และ C" → one entry per skill
+        m = re.search(r'(?:สกิล|skill)\s*(.+?)\s*(?=\d+(?:\.\d+)?\s*%|ลง\s*\d|เพิ่ม|ลด|$)', line, re.I)
+        names = re.split(r',|และ|หรือ|/', m.group(1)) if m else []
+        for n in names:
+            n = re.sub(r'\[|\]|Lv\.?\s*\d+', '', n).strip(' .')
+            if re.match(r'^[A-Z][A-Za-z\'\-\. ]+$', n): out.append(('skill', n))
+        if out: return out
+    rest = line
+    for m in P_ELEMENT.finditer(line):
+        out.append(('element', ELEMENT[m.group(1).lower()]))
+    # "ธาตุ Undead ธาตุ Shadow" / "ธาตุ Fire, Water" — elements listed after one "ธาตุ"
+    m = re.search(r'ธาตุ\s*((?:(?:' + _alt(ELEMENT) + r')\s*[,/และ]*\s*)+)', line, re.I)
+    if m:
+        for e in re.findall(_alt(ELEMENT), m.group(1), re.I):
+            t = ('element', ELEMENT[e.lower()])
+            if t not in out: out.append(t)
+        rest = line.replace(m.group(0), ' ')
+    for m in P_SIZE.finditer(rest):
+        t = ('size', SIZE[m.group(1).lower()])
+        if t not in out: out.append(t)
+    m = re.search(r'ขนาด\s*((?:(?:' + _alt(SIZE) + r')\s*[,/และ]*\s*)+)', rest, re.I)
+    if m:
+        for e in re.findall(_alt(SIZE), m.group(1), re.I):
+            t = ('size', SIZE[e.lower()])
+            if t not in out: out.append(t)
+    if re.search(r'\bboss\b|บอส', rest, re.I): out.append(('race', 'boss'))
+    for m in P_RACE.finditer(rest):
+        t = ('race', RACE[m.group(1).lower()])
+        if t not in out and t[1] != 'boss': out.append(t)
+    if not out:
+        k, v = _target(line)
+        if k: out.append((k, v))
+    return out
 
 def _pct(line):
     m = P_PCT.search(line)
@@ -181,26 +221,31 @@ def parse_line(line):
 
     # --- damage / resist / ignore def (targeted) -----------------------------
     if pct is not None and not out.get('variableCastPercent') and not out.get('afterCastDelayPercent'):
-        kind, tgt = _target(text)
+        targets = _targets(text)
+        kind, tgt = targets[0] if targets else (None, None)
         dk = _kind(text)
         is_resist = re.search(r'ที่ได้รับ|ได้รับจาก|ความเสียหายจาก|ทนทาน|ต้านทาน|ลด\s*Damage\s*(?:จาก|ที่)|Damage\s*ที่ได้รับ|ลดค่าความเสียหาย|ลดความเสียหาย|ลดพลังโจมตีจาก|ป้องกันการโจมตี|ลดดาเมจ', text)
         is_ignore = re.search(r'เพิกเฉย|ไม่สนใจ|ลดค่าพลังป้องกัน|ลดพลังป้องกัน|ทะลุ(?:ทะลวง)?พลังป้องกัน|Ignore', text, re.I)
-        is_dmg = re.search(r'เพิ่ม.*(?:Damage|ดาเมจ|ความเสียหาย|ความแรง|พลังโจมตี)|โจมตี.*แรงขึ้น|Damage.*เพิ่มขึ้น|(?:Damage|ความเสียหาย)\s*\+', text, re.I)
+        is_dmg = re.search(r'เพิ่ม.*(?:Damage|ดาเมจ|ความเสียหาย|ความแรง|ความรุนแรง|พลังโจมตี)|โจมตี.*แรงขึ้น|Damage.*เพิ่มขึ้น|(?:Damage|ความเสียหาย)\s*\+', text, re.I)
         if is_ignore and re.search(r'ป้องกัน|def', text, re.I):
-            t = f'{kind}:{tgt}' if kind else 'race:all'
-            if dk in ('phys', 'both'): _add(out, f'ignoreDef:{t}', pct)
-            if dk in ('magic', 'both'): _add(out, f'ignoreMdef:{t}', pct)
+            for k2, t2 in (targets or [('race', 'all')]):
+                if dk in ('phys', 'both'): _add(out, f'ignoreDef:{k2}:{t2}', pct)
+                if dk in ('magic', 'both'): _add(out, f'ignoreMdef:{k2}:{t2}', pct)
         elif is_resist:
             if re.search(r'ระยะไกล', text): _add(out, 'resist:range:ranged', pct)
-            elif kind: _add(out, f'resist:{kind}:{tgt}', pct)
+            elif targets:
+                for k2, t2 in targets: _add(out, f'resist:{k2}:{t2}', pct)
             elif re.search(r'ศัตรู|มอนสเตอร์|ทุกชนิด|ทั้งหมด|Damage', text): _add(out, 'resist:race:all', pct)
         elif is_dmg and 'critDamagePercent' not in out:
             if re.search(r'Critical', text, re.I) and not kind: _add(out, 'critDamagePercent', pct)
-            elif kind == 'skill': _add(out, f'skillDamage:{tgt}', pct)
+            elif kind == 'skill':
+                for _, name in targets: _add(out, f'skillDamage:{name}', pct)
             elif kind == 'range': _add(out, 'rangedDamagePercent' if tgt == 'ranged' else 'meleeDamagePercent', pct)
             elif kind:
-                if dk in ('phys', 'both'): _add(out, f'physDamage:{kind}:{tgt}', pct)
-                if dk in ('magic', 'both'): _add(out, f'magicDamage:{kind}:{tgt}', pct)
+                for k2, t2 in targets:
+                    if k2 == 'range': continue
+                    if dk in ('phys', 'both'): _add(out, f'physDamage:{k2}:{t2}', pct)
+                    if dk in ('magic', 'both'): _add(out, f'magicDamage:{k2}:{t2}', pct)
             elif re.search(r'ทางกายภาพ|physical', text, re.I) and not re.search(r'เวทมนตร์', text): _add(out, 'atkPercent', pct)
             elif re.search(r'เวทมนตร์|magic', text, re.I): _add(out, 'matkPercent', pct)
 
