@@ -1,5 +1,5 @@
 {
- "_doc": "NPC enchant rules per item. position = card slot the enchant occupies (4 = last, then 3, 2). options = allowed enchant item IDs (null = any enchant). Items not listed fall back to `default`. Maintained by hand from Gnjoy pages / in-game screenshots — the client has no enchant data.",
+ "_doc": "NPC enchant rules per item. position = card slot the enchant occupies (4 = last, then 3, 2). options = allowed enchant item IDs (null = any enchant). Items not listed fall back to `default`. Maintained by hand from Gnjoy pages / in-game screenshots — the client has no enchant data. `randomOptions` = rows of range-based random options (Tengu B.Scroll, BP Shadow boxes): the user types the rolled value; each row stores {key, value} and is summed like a bonus.",
  "default": {
   "name": "Hidden Enchant (STR/AGI/VIT/INT/DEX/LUK +1~+3)",
   "slots": [
@@ -5486,6 +5486,482 @@
       27412,
       4842,
       4866
+     ]
+    }
+   ]
+  },
+  "490826": {
+   "name": "4th ROC Anniversary Ring Enchant (Gemstone of Time)",
+   "source": "https://roc.gnjoy.in.th/event/equipment-gemstone-of-time/",
+   "verified": true,
+   "note": "NPC 4th Anni Ring Enchant (ห้องสมุดโลก) ต้องมี Certificate High Class. ช่อง 4 และ 3: สุ่ม STR/INT/DEX/AGI/VIT/LUK +3~+5 (Echo Stone 10/20 + 100k) ช่อง 2: Special — Spell / Expert Archer / Fighting Spirit เริ่ม Lv.4 อัพได้ถึง Lv.10 (Silvervine, 50/35/25/15/13/8%, ล้มเหลวไม่ลดขั้น). ไม่มีลำดับบังคับ, ไม่มีขั้นตีบวกขั้นต่ำ. Reset ทั้งหมด 1M เมื่อออฟครบทุกช่อง",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      4702,
+      4703,
+      4704,
+      4712,
+      4713,
+      4714,
+      4722,
+      4723,
+      4724,
+      4732,
+      4733,
+      4734,
+      4742,
+      4743,
+      4744,
+      4752,
+      4753,
+      4754
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      4702,
+      4703,
+      4704,
+      4712,
+      4713,
+      4714,
+      4722,
+      4723,
+      4724,
+      4732,
+      4733,
+      4734,
+      4742,
+      4743,
+      4744,
+      4752,
+      4753,
+      4754
+     ]
+    },
+    {
+     "position": 2,
+     "minRefine": 0,
+     "options": [
+      4812,
+      4826,
+      4827,
+      4828,
+      4829,
+      4830,
+      4831,
+      4835,
+      4836,
+      4837,
+      4838,
+      4839,
+      4840,
+      4841,
+      4808,
+      4820,
+      4821,
+      4822,
+      4823,
+      4824,
+      4825
+     ]
+    }
+   ]
+  },
+  "410517": {
+   "name": "Tengu B.Scroll Random Option",
+   "source": "https://roc.gnjoy.in.th/promotion/4th-anniversary-scroll/",
+   "verified": true,
+   "note": "Tengu B.Scroll (NPC Cursed Knight's 2M zeny / 2 Silvervine) สุ่ม Random Option แถว 1 เสมอ, มีโอกาส 3% ได้แถว 2 — ค่าสุ่มในช่วง min–max ผู้ใช้กรอกค่าที่ได้จริง",
+   "slots": [],
+   "randomOptions": [
+    {
+     "label": "Option 1",
+     "options": [
+      {
+       "key": "variableCastPercent",
+       "label": "ลดระยะเวลาร่าย",
+       "min": 1,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "afterCastDelayPercent",
+       "label": "ลดดีเลย์",
+       "min": 1,
+       "max": 5,
+       "unit": "%"
+      },
+      {
+       "key": "def",
+       "label": "ป้องกัน (DEF)",
+       "min": 5,
+       "max": 200,
+       "unit": ""
+      },
+      {
+       "key": "mdef",
+       "label": "ป้องกันเวทย์ (MDEF)",
+       "min": 5,
+       "max": 30,
+       "unit": ""
+      },
+      {
+       "key": "hit",
+       "label": "แม่นยำ (HIT)",
+       "min": 5,
+       "max": 150,
+       "unit": ""
+      },
+      {
+       "key": "flee",
+       "label": "หลบหลีก (FLEE)",
+       "min": 5,
+       "max": 50,
+       "unit": ""
+      },
+      {
+       "key": "maxHp",
+       "label": "MHP",
+       "min": 1,
+       "max": 1000,
+       "unit": ""
+      },
+      {
+       "key": "maxSp",
+       "label": "MSP",
+       "min": 1,
+       "max": 150,
+       "unit": ""
+      }
+     ]
+    },
+    {
+     "label": "Option 2 (โอกาส 3%)",
+     "options": [
+      {
+       "key": "ignoreMdef:race:normal",
+       "label": "เจาะเกราะเวทมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreMdef:race:boss",
+       "label": "เจาะเกราะเวทต่อ MVP",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreDef:race:normal",
+       "label": "เจาะเกราะกายภาพมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreDef:race:boss",
+       "label": "เจาะเกราะกายภาพต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "magicDamage:race:normal",
+       "label": "โจมตีเวทมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "magicDamage:race:boss",
+       "label": "โจมตีเวทต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "physDamage:race:normal",
+       "label": "โจมตีกายภาพมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "physDamage:race:boss",
+       "label": "โจมตีกายภาพต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      }
+     ]
+    }
+   ]
+  },
+  "410518": {
+   "name": "Tengu B.Scroll Random Option",
+   "source": "https://roc.gnjoy.in.th/promotion/4th-anniversary-scroll/",
+   "verified": true,
+   "note": "Tengu B.Scroll (NPC Cursed Knight's 2M zeny / 2 Silvervine) สุ่ม Random Option แถว 1 เสมอ, มีโอกาส 3% ได้แถว 2 — ค่าสุ่มในช่วง min–max ผู้ใช้กรอกค่าที่ได้จริง",
+   "slots": [],
+   "randomOptions": [
+    {
+     "label": "Option 1",
+     "options": [
+      {
+       "key": "variableCastPercent",
+       "label": "ลดระยะเวลาร่าย",
+       "min": 1,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "afterCastDelayPercent",
+       "label": "ลดดีเลย์",
+       "min": 1,
+       "max": 5,
+       "unit": "%"
+      },
+      {
+       "key": "def",
+       "label": "ป้องกัน (DEF)",
+       "min": 5,
+       "max": 200,
+       "unit": ""
+      },
+      {
+       "key": "mdef",
+       "label": "ป้องกันเวทย์ (MDEF)",
+       "min": 5,
+       "max": 30,
+       "unit": ""
+      },
+      {
+       "key": "hit",
+       "label": "แม่นยำ (HIT)",
+       "min": 5,
+       "max": 150,
+       "unit": ""
+      },
+      {
+       "key": "flee",
+       "label": "หลบหลีก (FLEE)",
+       "min": 5,
+       "max": 50,
+       "unit": ""
+      },
+      {
+       "key": "maxHp",
+       "label": "MHP",
+       "min": 1,
+       "max": 1000,
+       "unit": ""
+      },
+      {
+       "key": "maxSp",
+       "label": "MSP",
+       "min": 1,
+       "max": 150,
+       "unit": ""
+      }
+     ]
+    },
+    {
+     "label": "Option 2 (โอกาส 3%)",
+     "options": [
+      {
+       "key": "ignoreMdef:race:normal",
+       "label": "เจาะเกราะเวทมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreMdef:race:boss",
+       "label": "เจาะเกราะเวทต่อ MVP",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreDef:race:normal",
+       "label": "เจาะเกราะกายภาพมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreDef:race:boss",
+       "label": "เจาะเกราะกายภาพต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "magicDamage:race:normal",
+       "label": "โจมตีเวทมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "magicDamage:race:boss",
+       "label": "โจมตีเวทต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "physDamage:race:normal",
+       "label": "โจมตีกายภาพมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "physDamage:race:boss",
+       "label": "โจมตีกายภาพต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      }
+     ]
+    }
+   ]
+  },
+  "5933": {
+   "name": "Tengu B.Scroll Random Option",
+   "source": "https://roc.gnjoy.in.th/promotion/4th-anniversary-scroll/",
+   "verified": true,
+   "note": "Tengu B.Scroll (NPC Cursed Knight's 2M zeny / 2 Silvervine) สุ่ม Random Option แถว 1 เสมอ, มีโอกาส 3% ได้แถว 2 — ค่าสุ่มในช่วง min–max ผู้ใช้กรอกค่าที่ได้จริง",
+   "slots": [],
+   "randomOptions": [
+    {
+     "label": "Option 1",
+     "options": [
+      {
+       "key": "variableCastPercent",
+       "label": "ลดระยะเวลาร่าย",
+       "min": 1,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "afterCastDelayPercent",
+       "label": "ลดดีเลย์",
+       "min": 1,
+       "max": 5,
+       "unit": "%"
+      },
+      {
+       "key": "def",
+       "label": "ป้องกัน (DEF)",
+       "min": 5,
+       "max": 200,
+       "unit": ""
+      },
+      {
+       "key": "mdef",
+       "label": "ป้องกันเวทย์ (MDEF)",
+       "min": 5,
+       "max": 30,
+       "unit": ""
+      },
+      {
+       "key": "hit",
+       "label": "แม่นยำ (HIT)",
+       "min": 5,
+       "max": 150,
+       "unit": ""
+      },
+      {
+       "key": "flee",
+       "label": "หลบหลีก (FLEE)",
+       "min": 5,
+       "max": 50,
+       "unit": ""
+      },
+      {
+       "key": "maxHp",
+       "label": "MHP",
+       "min": 1,
+       "max": 1000,
+       "unit": ""
+      },
+      {
+       "key": "maxSp",
+       "label": "MSP",
+       "min": 1,
+       "max": 150,
+       "unit": ""
+      }
+     ]
+    },
+    {
+     "label": "Option 2 (โอกาส 3%)",
+     "options": [
+      {
+       "key": "ignoreMdef:race:normal",
+       "label": "เจาะเกราะเวทมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreMdef:race:boss",
+       "label": "เจาะเกราะเวทต่อ MVP",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreDef:race:normal",
+       "label": "เจาะเกราะกายภาพมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 15,
+       "unit": "%"
+      },
+      {
+       "key": "ignoreDef:race:boss",
+       "label": "เจาะเกราะกายภาพต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "magicDamage:race:normal",
+       "label": "โจมตีเวทมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "magicDamage:race:boss",
+       "label": "โจมตีเวทต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "physDamage:race:normal",
+       "label": "โจมตีกายภาพมอนสเตอร์ทั่วไป",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      },
+      {
+       "key": "physDamage:race:boss",
+       "label": "โจมตีกายภาพต่อ MVP",
+       "min": 5,
+       "max": 10,
+       "unit": "%"
+      }
      ]
     }
    ]

@@ -60,6 +60,7 @@ const buildBody = t.Object({
       card2Id: t.Optional(t.Nullable(t.Integer())),
       card3Id: t.Optional(t.Nullable(t.Integer())),
       card4Id: t.Optional(t.Nullable(t.Integer())),
+      randomOptions: t.Optional(t.Array(t.Object({ key: t.String({ maxLength: 60 }), value: t.Number() }), { maxItems: 4 })),
     }),
   ),
 });
@@ -175,6 +176,7 @@ const app = new Elysia()
               card2Id: s.card2Id ?? null,
               card3Id: s.card3Id ?? null,
               card4Id: s.card4Id ?? null,
+              randomOptions: s.randomOptions ?? [],
             })),
           },
         },

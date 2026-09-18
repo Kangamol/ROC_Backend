@@ -133,5 +133,8 @@ model EquipmentSlot {
   card4Id Int?
   card4   Item? @relation("SlotCard4", fields: [card4Id], references: [id])
 
+  /// Range-based random options rolled on the item (Tengu B.Scroll …): [{ key, value }] in bonus-key vocabulary
+  randomOptions Json @default("[]")
+
   @@unique([buildId, location])
 }
