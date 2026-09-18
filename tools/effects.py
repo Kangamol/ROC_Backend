@@ -56,7 +56,7 @@ RACE = {
     'player': 'player', 'ผู้เล่น': 'player', 'veggie': 'plant', 'boss': 'boss', 'บอส': 'boss', 'ทุกเผ่า': 'all', 'ศัตรูทั่วไป': 'normal', 'มอนสเตอร์ธรรมดา': 'normal', 'monster ธรรมดา': 'normal', 'มอนสเตอร์ทั่วไป': 'normal', 'ศัตรูทั้งหมด': 'all', 'ศัตรูทุกชนิด': 'all',
 }
 ELEMENT = {
-    'neutral': 'neutral', 'ไร้ธาตุ': 'neutral', 'water': 'water', 'น้ำ': 'water', 'earth': 'earth', 'ดิน': 'earth',
+    'neutral': 'neutral', 'neatral': 'neutral', 'ไร้ธาตุ': 'neutral', 'water': 'water', 'น้ำ': 'water', 'earth': 'earth', 'ดิน': 'earth',
     'fire': 'fire', 'ไฟ': 'fire', 'wind': 'wind', 'ลม': 'wind', 'poison': 'poison', 'พิษ': 'poison',
     'holy': 'holy', 'ศักดิ์สิทธิ์': 'holy', 'shadow': 'shadow', 'dark': 'shadow', 'มืด': 'shadow',
     'ghost': 'ghost', 'ผี': 'ghost', 'undead': 'undead', 'อันเดด': 'undead', 'ทุกธาตุ': 'all',
@@ -65,7 +65,7 @@ SIZE = {'เล็ก': 'small', 'small': 'small', 'กลาง': 'medium', 'me
 
 def _alt(d): return '|'.join(sorted(map(re.escape, d), key=len, reverse=True))
 P_RACE = re.compile(r'(?:เผ่า|ประเภท|race|จาก|ต่อ|ของ|โจมตี|มอนสเตอร์)?\s*(' + _alt(RACE) + r')(?![A-Za-z])', re.I)
-P_ELEMENT = re.compile(r'ธาตุ\s*(?:\()?\s*(' + _alt(ELEMENT) + r')(?![A-Za-z])', re.I)
+P_ELEMENT = re.compile(r'(?:ธาตุ\s*(?:\()?\s*(' + _alt(ELEMENT) + r')|(ไร้ธาตุ))(?![A-Za-z])', re.I)
 P_SIZE = re.compile(r'(?:(?:ขนาด|size)\s*(' + _alt(SIZE) + r')|(ทุกขนาด))(?![A-Za-z])', re.I)
 P_SKILL = re.compile(r'(?:สกิล|skill)\s*\[?\s*([A-Z][A-Za-z\'\-\. ]+?)\s*\]?\s*(?=\+|\d|Lv|ลง|เพิ่ม|ลด|,|$|ขึ้น|ที่)', re.I)
 P_PCT = re.compile(r'([+\-]?\s*\d+(?:\.\d+)?)\s*%')
@@ -73,7 +73,9 @@ P_NUM = re.compile(r'(\d+(?:\.\d+)?)')
 
 # cast / delay ----------------------------------------------------------------
 _VCT = r'(?:Vari?able\s*Cast(?:ing)?\s*Time|Virable\s*Cast\s*Time|VCT|(?:ระยะ)?เวลา(?:ใน)?(?:การ)?ร่าย(?:เวทย์|เวทมนตร์|สกิล|คาถา)?(?:แบบ)?(?:แปรผัน|ผันแปร)?)'
-P_VCT_DOWN = re.compile(r'(?:ลด\s*' + _VCT + r'|' + _VCT + r'\s*ลดลง)\s*(?:ลง|เพิ่มเติม|เพิ่มอีก|อีก|\s)*(\d+(?:\.\d+)?)\s*%', re.I)
+_MORE_WORDS = r'ลง|เพิ่มเติม|เพิ่มขึ้นอีก|เพิ่มอีก|ขึ้นอีก|อีก|ขึ้น|ทีละ'      # "ลง", "เพิ่มเติม", "เพิ่มขึ้นอีก" … between the phrase and the number
+_MORE = r'(?:' + _MORE_WORDS + r'|\s)*'
+P_VCT_DOWN = re.compile(r'(?:ลด\s*' + _VCT + r'|' + _VCT + r'\s*ลดลง)\s*' + _MORE + r'(\d+(?:\.\d+)?)\s*%', re.I)
 P_VCT_UP = re.compile(r'เพิ่ม\s*' + _VCT + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
 # fixed cast: "Fixed Cast Time", "Fix Casting", "FCT", "ระยะเวลาร่ายแบบคงที่/คงตัว/ตายตัว", "การร่ายแบบคงตัว", "เวลาในการร่ายแบบ Fixed Cast Time"
 _FCT = (r'(?:(?:ระยะ)?(?:เวลา)?(?:ใน)?(?:การ)?ร่าย(?:เวทย์|เวทมนตร์)?\s*(?:แบบ)?\s*(?:Fix(?:ed)?\s*Cast(?:ing)?(?:\s*Time|ime)?|คงที่|คงตัว|ตายตัว)'
@@ -83,12 +85,12 @@ _FCT = (r'(?:(?:ระยะ)?(?:เวลา)?(?:ใน)?(?:การ)?ร่�
         r'|การร่าย(?:เวทย์)?แบบ(?:คงที่|คงตัว|ตายตัว))')
 # "ลด Fixed Cast Time ของสกิล X 0.5 วินาที", "ลดระยะเวลาร่ายแบบคงที่ของสกิล [A], [B] 50%"
 P_FCT_SKILL = re.compile(r'(?:ลด\s*)?' + _FCT + r'\s*(?:ของ|ให้กับ)?\s*(?:สกิล|Skill)\s*.+?(?:ลง|ลดลง)?\s*(\d+(?:\.\d+)?)\s*(วินาที|%)', re.I)
-P_FCT_DOWN = re.compile(r'(?:ลด\s*' + _FCT + r'|' + _FCT + r'\s*ลดลง)(?:\s*ของ\s*(?:สกิล|Skill))?\s*(?:ลง|ลดลง|เพิ่มเติม|อีก|ทีละ|\s)*-?\s*(\d+(?:\.\d+)?)\s*(วินาที|%|(?=\s*(?:,|$)))', re.I)
-_ACD = r'(?:After\s*Cast\s*Delay|ACD|(?:สกิล)?\s*(?:Delay|ดีเลย์)(?:\s*หลัง(?:จาก)?(?:การ)?ใช้สกิล)?)'
-P_ACD_DOWN = re.compile(r'(?:ลด\s*' + _ACD + r'|' + _ACD + r'\s*ลดลง)\s*(?:ลง|เพิ่มเติม|เพิ่มอีก|อีก|\s)*(\d+(?:\.\d+)?)\s*%', re.I)
+P_FCT_DOWN = re.compile(r'(?:ลด\s*' + _FCT + r'|' + _FCT + r'\s*ลดลง)(?:\s*ของ\s*(?:สกิล|Skill))?\s*(?:ลดลง|' + _MORE_WORDS + r'|\s)*-?\s*(\d+(?:\.\d+)?)\s*(วินาที|%|(?=\s*(?:,|$)))', re.I)
+_ACD = r'(?:After\s*Cast\s*Delay|ACD|(?:สกิล)?\s*(?:Delay|ดีเลย์)(?:\s*(?:หลัง(?:จาก)?(?:การ)?|ใน(?:การ)?)ใช้(?:งาน)?สกิล)?)'
+P_ACD_DOWN = re.compile(r'(?:ลด\s*' + _ACD + r'|' + _ACD + r'\s*ลดลง)\s*' + _MORE + r'(\d+(?:\.\d+)?)\s*%', re.I)
 P_ACD_UP = re.compile(r'เพิ่ม\s*' + _ACD + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
 # "ลดระยะเวลาในการร่ายเวทย์คิดเป็น% ตามการอั[พป]เกรดหมวก"  → 1% per refine
-P_RECOV = re.compile(r'(ลด|เพิ่ม)?\s*(?:อัตรา|ความเร็ว)?(?:ใน)?(?:การ)?ฟื้น(?:ฟู|ค่า)?\s*(HP|SP)(?:\s*ตามธรรมชาติ)?\s*(?:ลง|ขึ้น|อีก|\s)*(\d+(?:\.\d+)?)\s*%|(HP|SP)\s*Recovery\s*(?:Rate)?\s*\+?\s*(\d+(?:\.\d+)?)\s*%', re.I)
+P_RECOV = re.compile(r'(ลด|เพิ่ม)?\s*(?:อัตรา|ความเร็ว)?(?:ใน)?(?:การ)?ฟื้น(?:ฟู|ค่า)?\s*(HP|SP)(?:\s*[,/]\s*(?:และ\s*)?(HP|SP))?(?:\s*ตามธรรมชาติ)?\s*(?:ลง|ขึ้น|อีก|\s)*(\d+(?:\.\d+)?)\s*%|(HP|SP)\s*Recovery\s*(?:Rate)?\s*\+?\s*(\d+(?:\.\d+)?)\s*%', re.I)
 P_VCT_PER_REFINE = re.compile(r'ลด\s*' + _VCT + r'.*(?:คิดเป็น|เท่ากับ)\s*%?\s*ตาม(?:การ|ระดับ)?(?:อั[พป]เกรด|ตีบวก|Refine)', re.I)
 
 # conditions ------------------------------------------------------------------
@@ -166,7 +168,7 @@ def _target(line):
     if m and not re.search(r'สามารถใช้', line):
         return 'skill', m.group(1).strip()
     m = P_ELEMENT.search(line)
-    if m: return 'element', ELEMENT[m.group(1).lower()]
+    if m: return 'element', ELEMENT[(m.group(1) or m.group(2)).lower()]
     m = P_SIZE.search(line)
     if m: return 'size', SIZE[(m.group(1) or m.group(2)).lower()]
     if re.search(r'\bboss\b|บอส', line, re.I): return 'race', 'boss'
@@ -182,6 +184,13 @@ def _targets(line):
     """All targets named in one line, e.g. "เผ่า Demon, Undead และธาตุ Undead, Shadow" →
     [race:demon, race:undead, element:undead, element:shadow]. Falls back to _target()."""
     out = []
+    # "ลดพลังโจมตีจากทุกธาตุ 5% ยกเว้นการโจมตีแบบไร้ธาตุ" → every element but the excluded ones
+    m_ex = re.search(r'ยกเว้น(.*)$', line)
+    if m_ex:
+        excluded = {ELEMENT[(m.group(1) or m.group(2)).lower()] for m in P_ELEMENT.finditer(m_ex.group(1))}
+        line = line[:m_ex.start()]
+        if excluded and re.search(r'ทุกธาตุ', line):
+            return [('element', e) for e in ('neutral', 'water', 'earth', 'fire', 'wind', 'poison', 'holy', 'shadow', 'ghost', 'undead') if e not in excluded]
     if P_SKILL.search(line) and not re.search(r'สามารถใช้', line):
         # "สกิล A, B และ C" → one entry per skill
         m = re.search(r'(?:สกิล|skill)\s*(.+?)\s*(?=\d+(?:\.\d+)?\s*%|ลง\s*\d|เพิ่ม|ลด|$)', line, re.I)
@@ -198,7 +207,8 @@ def _targets(line):
             return [('skill', n) for n in names]
     rest = line
     for m in P_ELEMENT.finditer(line):
-        out.append(('element', ELEMENT[m.group(1).lower()]))
+        t = ('element', ELEMENT[(m.group(1) or m.group(2)).lower()])
+        if t not in out: out.append(t)
     # "ธาตุ Undead ธาตุ Shadow" / "ธาตุ Fire, Water" — elements listed after one "ธาตุ"
     m = re.search(r'ธาตุ\s*((?:(?:' + _alt(ELEMENT) + r')\s*[,/และ]*\s*)+)', line, re.I)
     if m:
@@ -233,7 +243,7 @@ def parse_line(line):
     A line made of several "…N%" clauses ("เพิ่ม Damage ที่ได้รับจากธาตุ Holy 10%, เพิ่ม Damage ที่ได้รับจากเผ่า Angel 15%")
     is parsed clause by clause so each keeps its own number; otherwise the whole line is parsed at once."""
     if P_SKIP_EFFECT.search(line) or P_NOISE.search(line): return {}
-    groups = [g for g in re.split(r'(?<=[\d%)])\s*,(?![^()]*\))', line) if g.strip()]
+    groups = [g for g in re.split(r'(?<=[\d%)])\s*,(?![^()]*\))|(?<=%)\s+(?=(?:เพิ่ม|ลด)(?!เติม|ขึ้น|อีก|ลง))', line) if g.strip()]
     if len(groups) >= 2 and sum('%' in g for g in groups) >= 2:
         out = {}
         for g in groups:
@@ -319,9 +329,9 @@ def _parse_clause(line):
     # --- SP cost / recovery / exp --------------------------------------------
     # "ลดอัตราการฟื้นฟู SP 100%", "เพิ่มความเร็วในการฟื้นฟู HP 10%", "HP Recovery + 10%" — each with its own number and sign
     for m in P_RECOV.finditer(text):
-        which = (m.group(2) or m.group(4)).upper()
-        val = float(m.group(3) or m.group(5)) * (-1 if m.group(1) == 'ลด' else 1)
-        _add(out, 'hpRecoveryPercent' if which == 'HP' else 'spRecoveryPercent', val)
+        val = float(m.group(4) or m.group(6)) * (-1 if m.group(1) == 'ลด' else 1)
+        for which in (m.group(2), m.group(3), m.group(5)):
+            if which: _add(out, 'hpRecoveryPercent' if which.upper() == 'HP' else 'spRecoveryPercent', val)
     pct = _pct(text)
     if pct is not None and ('hpRecoveryPercent' in out or 'spRecoveryPercent' in out):
         pct = None  # handled above; keep the generic branches from re-reading the same number
@@ -345,7 +355,7 @@ def _parse_clause(line):
         targets = _targets(text)
         kind, tgt = targets[0] if targets else (None, None)
         dk = _kind(text)
-        is_resist = re.search(r'ที่ได้รับ|ได้รับจาก|ทนทาน|ต้านทาน|ลด\s*Damage\s*(?:จาก|ที่)|Damage\s*ที่ได้รับ|ลดค่าความเสียหาย|ลดความเสียหาย|ลดพลังโจมตีจาก|ป้องกันการโจมตี|ลดดาเมจ', text) \
+        is_resist = re.search(r'ที่ได้รับ|ได้รับจาก|ทนทาน|ต้านทาน|ลด\s*Damage\s*(?:จาก|ที่)|Damage\s*ที่ได้รับ|ลดค่าความเสียหาย|ลดความเสียหาย|ลดพลังโจมตีจาก|ป้องกันการโจมตี|ลดดาเมจ|พลังป้องกันต่อ', text) \
             or (re.search(r'ความเสียหายจาก', text) and re.search(r'ลด|ป้องกัน', text))   # "เพิ่มค่าความเสียหายจากการโจมตีระยะไกลขึ้น 2%" is damage dealt
         is_ignore = re.search(r'เพิกเฉย|เผิกเฉย|ไม่สนใจ|ลดค่าพลังป้องกัน|ลดพลังป้องกัน|ทะลุ(?:ทะลวง)?พลังป้องกัน|Ignore', text, re.I)
         # "เพิ่ม Damage ที่ได้รับจาก…" = takes MORE damage → negative resistance
