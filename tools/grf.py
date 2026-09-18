@@ -4,10 +4,37 @@
 Supports plain (flag 1) entries plus the GRF DES / mixcrypt encryption used by
 official clients. Filenames inside the archive are CP949 (EUC-KR) encoded.
 """
-import struct, zlib, sys
+import struct, zlib, sys, os, re
 from pathlib import Path
 
 HEADER = 46
+ROOT = Path(__file__).resolve().parent.parent
+
+
+def default_grf_path():
+    """Where data.grf lives on this machine, in priority order:
+    1. GRF_PATH environment variable
+    2. GRF_PATH= line in server/.env (same setting the API uses)
+    3. client/RagnarokClassic/data.grf (unzipped RagnarokClassic.zip)
+    """
+    p = os.environ.get('GRF_PATH')
+    if not p:
+        env = ROOT / 'server' / '.env'
+        if env.exists():
+            for line in env.read_text(encoding='utf-8').splitlines():
+                m = re.match(r'\s*GRF_PATH\s*=\s*(.+?)\s*$', line)
+                if m:
+                    p = m.group(1).strip().strip('"').strip("'")
+    return Path(p).expanduser() if p else ROOT / 'client' / 'RagnarokClassic' / 'data.grf'
+
+
+def open_grf(path=None):
+    path = Path(path) if path else default_grf_path()
+    if not path.exists():
+        sys.exit(f'data.grf not found: {path}\n'
+                 'Set GRF_PATH in server/.env (or the environment) to your installed client\'s data.grf, '
+                 'or unzip RagnarokClassic.zip into client/ (see tools/README.md).')
+    return Grf(path)
 
 class GrfEntry:
     __slots__ = ('name', 'comp_size', 'comp_size_aligned', 'real_size', 'flags', 'offset')

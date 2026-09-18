@@ -4,7 +4,7 @@ client/
 
 # generated data (rebuild with tools/)
 data/items_raw.json
-public/assets/
+# public/assets/ (item icons) IS committed so other machines get pictures without the game client
 
 # runtime
 node_modules/

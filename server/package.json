@@ -22,10 +22,13 @@
   },
   "scripts": {
     "dev": "bun --watch src/index.ts",
+    "setup:check": "bun scripts/check-setup.ts",
     "start": "bun src/index.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:seed": "bun prisma/seed.ts",
-    "db:studio": "prisma studio"
+    "db:studio": "prisma studio",
+    "db:dump-builds": "docker exec ro_simulator_db pg_dump -U ro -d ro_simulator --data-only --column-inserts -t '\"CharacterBuild\"' -t '\"EquipmentSlot\"' > ../data/builds_dump.sql",
+    "db:restore-builds": "docker exec -i ro_simulator_db psql -U ro -d ro_simulator -v ON_ERROR_STOP=1 < ../data/builds_dump.sql"
   }
 }

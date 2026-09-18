@@ -2,7 +2,7 @@
 // from data.grf so nothing has to be pre-extracted. File names inside the GRF
 // are Korean; the API exposes ASCII ids (job keys, hair ids, item viewIds).
 import { Elysia, t } from "elysia";
-import { existsSync } from "node:fs";
+import { existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { GrfReader, type GrfIndex } from "./grf";
 
@@ -38,14 +38,27 @@ let robeNames: Record<string, string> = {};
 let manifest: unknown;
 
 if (enabled) {
-  const index = (await Bun.file(INDEX_PATH).json()) as GrfIndex;
+  const index = (await Bun.file(INDEX_PATH).json()) as GrfIndex & { __meta__?: { grf: string; size: number; mtime: number } };
+  const meta = index.__meta__;
+  delete index.__meta__;
+  const grfSize = statSync(GRF_PATH).size;
+  if (meta && meta.size !== grfSize) {
+    console.warn(
+      `sprites: ${INDEX_PATH} was built for a different data.grf (${meta.grf}, ${meta.size} bytes; this one is ${grfSize} bytes) — ` +
+        `re-run: python3 tools/build_grf_index.py`,
+    );
+  }
   grf = new GrfReader(GRF_PATH, index);
   accNames = ((await Bun.file(ACC_PATH).json()) as { AccNameTable: Record<string, string> }).AccNameTable;
   robeNames = ((await Bun.file(ROBE_PATH).json()) as { RobeNameTable: Record<string, string> }).RobeNameTable;
   manifest = buildManifest(grf);
   console.log(`sprites: serving from ${GRF_PATH} (${Object.keys(index).length} indexed entries)`);
 } else {
-  console.warn(`sprites: disabled — missing ${GRF_PATH} or ${INDEX_PATH} (run tools/build_grf_index.py)`);
+  console.warn(
+    `sprites: disabled — ` +
+      (existsSync(GRF_PATH) ? "" : `data.grf not found at ${GRF_PATH} (set GRF_PATH in server/.env to your game client's data.grf); `) +
+      (existsSync(INDEX_PATH) ? "" : `${INDEX_PATH} missing (run: python3 tools/build_grf_index.py)`),
+  );
 }
 
 function buildManifest(g: GrfReader) {

@@ -1,6 +1,8 @@
 # Data extraction pipeline (Phase 1)
 
-Source: local Gnjoy RO Classic (TH) client — `RagnarokClassic.zip` at project root.
+Source: local Gnjoy RO Classic (TH) client — `RagnarokClassic.zip` at project root, **or** an installed game:
+all scripts that read `data.grf` take the path from `GRF_PATH` (environment variable or `server/.env`), then fall
+back to `client/RagnarokClassic/data.grf`; a path can also be passed as the first argument.
 
 ```
 RagnarokClassic.zip

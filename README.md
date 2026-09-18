@@ -33,6 +33,34 @@ bun run dev
 #    see tools/README.md
 ```
 
+## Setting up on another machine
+
+Everything except the character-sprite preview is reproducible from git:
+
+- **Items** (11,154 rows) come from `data/items.json`, which is committed. `bun run db:seed` loads it
+  (upsert, safe to re-run; `--reset` wipes and reloads).
+- **Item icons** (`public/assets/items`, `collection`) are committed too (~150 MB) — no client needed for pictures.
+- **Saved builds / share links** live in `CharacterBuild` + `EquipmentSlot`. They are snapshotted into
+  `data/builds_dump.sql` — run `bun run db:dump-builds` (in `server/`) before committing, and
+  `bun run db:restore-builds` after `migrate` + `seed` on the new machine.
+- `server/.env` is git-ignored: copy `server/.env.example` (defaults match `docker-compose.yml`).
+- **Character sprites** need the game's `data.grf` (3.3 GB, not in git). If the game is installed on the machine,
+  set `GRF_PATH` in `server/.env` to its `data.grf` — no copying. Otherwise unzip `RagnarokClassic.zip` into
+  `client/` (tools/README.md step 1). Then build the offset index for *that* file:
+  `python3 tools/build_grf_index.py` (writes `data/grf_index.json`, git-ignored; re-run after every game patch —
+  the server warns at startup if the index no longer matches the GRF).
+
+```bash
+docker compose up -d
+cd server && cp .env.example .env            # edit GRF_PATH if the game is installed here
+bun install && bunx prisma migrate dev && bun run db:seed && bun run db:restore-builds
+bun run setup:check                           # lists anything still missing (icons, DB, GRF, index)
+bun run dev
+```
+
+Symptoms → cause: *no item pictures* = `public/assets` missing (pull again / `tools/extract_assets.py`);
+*character preview empty / "503 manifest"* = server logged `sprites: disabled` → `GRF_PATH` or `grf_index.json`.
+
 ## Frontend (web/)
 
 - `src/lib/slots.ts` — slot definitions (which `equipLocations` / card types each slot accepts)
@@ -47,8 +75,8 @@ bun run dev
 
 ## Visual preview data
 
-The API serves sprites **directly out of `client/RagnarokClassic/data.grf`** (`server/src/grf.ts`,
-`server/src/sprites.ts`) — nothing is pre-extracted. It needs `data/grf_index.json`
+The API serves sprites **directly out of `data.grf`** (`GRF_PATH` in `server/.env`, default `client/RagnarokClassic/data.grf`;
+`server/src/grf.ts`, `server/src/sprites.ts`) — nothing is pre-extracted. It needs `data/grf_index.json`
 (`python3 tools/build_grf_index.py`, re-run after a client patch) and `data/lua/{acc,robe}.json`.
 Routes: `/sprites/manifest.json`, `/sprites/body/<job>_<m|f>.spr|act`, `/sprites/head/<hair>_<g>.*`,
 `/sprites/acc/<viewId>_<g>.*`, `/sprites/robe/<robeId>_<job>_<g>.*`, `/sprites/pal-body/…`, `/sprites/pal-head/…`.

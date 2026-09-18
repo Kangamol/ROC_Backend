@@ -7,10 +7,9 @@ import json, io, sys, collections
 from pathlib import Path
 from PIL import Image
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from grf import Grf
+from grf import open_grf
 
 ROOT = Path(__file__).resolve().parent.parent
-GRF = ROOT / 'client' / 'RagnarokClassic' / 'data.grf'
 ITEMS = ROOT / 'data' / 'items.json'
 OUT_ICON = ROOT / 'public' / 'assets' / 'items'
 OUT_COLL = ROOT / 'public' / 'assets' / 'collection'
@@ -28,7 +27,7 @@ def bmp_to_png(data, dest):
     img.save(dest, 'PNG', optimize=True)
 
 def main():
-    g = Grf(GRF)
+    g = open_grf(sys.argv[1] if len(sys.argv) > 1 else None)
     items = json.load(open(ITEMS, encoding='utf-8'))
     OUT_ICON.mkdir(parents=True, exist_ok=True); OUT_COLL.mkdir(parents=True, exist_ok=True)
     stats = collections.Counter(); missing = []; failed = []
