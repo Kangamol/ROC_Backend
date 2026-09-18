@@ -133,6 +133,9 @@ async function loadJobs() {
   return jobsCache;
 }
 const jobs = (await loadJobs()).jobs;
+const ENCHANT_PATH = resolve(import.meta.dir, "../../data/enchant_pools.json");
+/** Read on every request (a few KB) so edits to the hand-maintained table show up without restarting the API. */
+const enchantPools = async () => ((await Bun.file(ENCHANT_PATH).exists()) ? Bun.file(ENCHANT_PATH).json() : { default: null, items: {} });
 if (!Object.keys(jobs).length) console.warn(`jobs: ${JOBS_PATH} missing — run tools/build_job_data.py (engine falls back to approximations)`);
 
 const app = new Elysia()
