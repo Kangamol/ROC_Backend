@@ -53,6 +53,15 @@ cd ../web && bun install && bun run dev
 | 2.9 | **4th ROC Anniversary Ring** | ช่อง 4/3: STR–LUK +3~+5 · ช่อง 2: Spell/Expert Archer/Fighting Spirit Lv.4–10 ไม่มีลำดับบังคับ |
 | 2.10 | ถุงมือ/แหวนอื่นที่ไม่อยู่ในตาราง | **ไม่มี**ช่อง enchant |
 | 2.11 | **Karasu / Crow Tengu Mask** (Middle) | 2 แถว Random Option: แถว 1 (8 ตัวเลือก), แถว 2 (เจาะเกราะ/โจมตี ทั่วไป/MVP) · เลือก "ลดระยะเวลาร่าย" พิมพ์ 25 → ถูกจำกัดเป็น 10 |
+| 2.13 | **Incursion Temporal Manteau** (#480076) | 2 แถว Random Option (17 ตัวเลือก/แถว) ค่าอยู่ในช่วง เช่น ลดเวลาร่าย 3–10%, ATK 5–40 |
+| 2.14 | **Incursion Temporal Boots** (#22202) | ช่อง 4: FS/EA/Spell/Vitality/Attack Speed/Lucky Lv.1–4 (เหมือน Infinity Boots) · ช่อง 3: Special เปิดเมื่อช่อง 4 Lv.4 |
+| 2.15 | **Temporal Str Boots** ไม่มีช่อง (#22000 / #470159) | ช่อง 4 ครั้งที่ 1–4: FS ATK+15/18/21/24, Archery 2–8%, Spell MATK 9–18, Vital VIT+2/+3/MHP+1%/+2%, Attack Speed 4–10%, Lucky LUK+3–6 · ช่อง 3: Special · รุ่นมี [1] (#22006) **ไม่มี**ช่อง enchant (Socket แล้ว enchant ไม่ได้) |
+| 2.16 | **Diabolus Boots** (#2433) | ช่อง 4 ครั้งที่ 1–4 (Lucky = CRI+1/2/5/7) · ช่อง 3 Special เมื่อช่อง 4 ครั้งที่ 4 |
+| 2.17 | **Diabolus Ring** (#2729) | ช่อง 4: DEX+1~4 / INT+1~4 · ช่อง 3 (Archbishop 4Lv / ATK 7% / MATK 7%) ล็อกจนช่อง 4 เป็น +4 |
+| 2.18 | **Diabolus Manteau** (#2537) +0 / +7 / +9 | ช่อง 4 → 3 → 2 เปิดตามตีบวก ชุดเดียวกับ Fallen Angel Wing (ช่อง 2 มี FS 6, Spell 7, EA 4, Fatal 4, MHP 4%, MSP 100, ASPD+1) |
+| 2.19 | **Cursed / Bloody Knight's Shield** (#28942 / #28945) | 2 แถว Random Option (ลด Damage เผ่า 2–7%, Damage เผ่า 1–5%, VCT หรือ ASPD 1–5%, MaxHP 100–1000 …) · **Purified** (#28946) 3 แถว แถว 3 มีเจาะเกราะเผ่า 30–60% |
+| 2.20 | **Ancient Hero weapons** (เช่น Awakened Narcissus Bow #700013, Royal Bow #18117) | 2 แถว Random Option แต่ละแถวมีตัวเลือก [Bravery] (กายภาพ) และ [Wisdom] (เวท) ตามหน้าโปรโมชัน |
+| 2.21 | Archbishop 4Lv (enchant Diabolus Ring) | Heal +20% และใช้ SP เพิ่ม 15% (แดง) — เดิมอ่านผิดเป็น SP −20 |
 | 2.12 | Save & Share แล้วเปิดลิงก์ใหม่ | การ์ด + enchant ทุกช่อง + Random Option กลับมาครบ |
 
 แก้ตารางกฎได้ที่ `data/enchant_pools.json` เห็นผลทันทีโดยไม่ต้องรีสตาร์ท API (รีเฟรชหน้าเว็บ)
@@ -72,5 +81,6 @@ cd ../web && bun install && bun run dev
 
 - HP/SP จริงของ Awakened ที่ Lv 100 / 110 / 120 (สัก 1–2 อาชีพ)
 - Job bonus stat ที่ Job 71–75
-- ยืนยัน Fallen Angel Wing: "ASPD 1–3" = Attack Delay 1–3 (ASPD +4/6/8%) ใช่ไหม และ "MATK+30" ในช่อง 3 คือไอเทมตัวไหน
+- Fallen Angel Wing: ตาราง Diabolus Manteau ยืนยันโครงสร้างเดียวกันแล้ว (ASPD 1–3 = Attack Delay) เหลือแค่ "MATK+30" ในช่อง 3 คือไอเทมตัวไหน
+- Knight's Shield แถว 3: "Negates size penalty" ยังไม่รองรับ (ไม่มี key)
 - Awakened Whitesmith/Creator: ตาราง ASPD จากในเกม

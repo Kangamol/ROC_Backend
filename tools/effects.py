@@ -243,7 +243,7 @@ def parse_line(line):
     A line made of several "…N%" clauses ("เพิ่ม Damage ที่ได้รับจากธาตุ Holy 10%, เพิ่ม Damage ที่ได้รับจากเผ่า Angel 15%")
     is parsed clause by clause so each keeps its own number; otherwise the whole line is parsed at once."""
     if P_SKIP_EFFECT.search(line) or P_NOISE.search(line): return {}
-    groups = [g for g in re.split(r'(?<=[\d%)])\s*,(?![^()]*\))|(?<=%)\s+(?=(?:เพิ่ม|ลด)(?!เติม|ขึ้น|อีก|ลง))', line) if g.strip()]
+    groups = [g for g in re.split(r'(?<=[\d%)])\s*,(?![^()]*\))|(?<=%)\s*(?:และ\s*|\s+)(?=(?:เพิ่ม|ลด)(?!เติม|ขึ้น|อีก|ลง))', line) if g.strip()]
     if len(groups) >= 2 and sum('%' in g for g in groups) >= 2:
         out = {}
         for g in groups:
