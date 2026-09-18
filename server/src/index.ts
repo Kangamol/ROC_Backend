@@ -67,7 +67,62 @@ const buildBody = t.Object({
 
 // Per-job tables (base HP/SP, ASPD, job-level stat bonuses) built by tools/build_job_data.py
 const JOBS_PATH = resolve(import.meta.dir, "../../data/jobs.json");
-const jobs: Record<string, unknown> = (await Bun.file(JOBS_PATH).exists()) ? await Bun.file(JOBS_PATH).json() : {};
+const jobs: Record<string, any> = (await Bun.file(JOBS_PATH).exists()) ? await Bun.file(JOBS_PATH).json() : {};
+
+// ---- Awakened classes (Gnjoy, 2026): derived from the base class tables + data/awakened.json ----------------
+const AWAKENED_PATH = resolve(import.meta.dir, "../../data/awakened.json");
+const awakened: any = (await Bun.file(AWAKENED_PATH).exists()) ? await Bun.file(AWAKENED_PATH).json() : null;
+/** Continue a per-level table past its last entry with a quadratic fitted to the last 20 points (pre-re HP grows quadratically, SP linearly). */
+function extrapolate(arr: number[], to: number): number[] {
+  const n = arr.length;
+  if (n >= to) return arr;
+  const k = Math.min(20, n);
+  const xs = Array.from({ length: k }, (_, i) => n - k + i + 1);
+  const ys = arr.slice(n - k);
+  // least squares y = a + b x + c x^2
+  const S = (f: (x: number, y: number) => number) => xs.reduce((acc, x, i) => acc + f(x, ys[i]!), 0);
+  const m = [[k, S((x) => x), S((x) => x * x)], [S((x) => x), S((x) => x * x), S((x) => x ** 3)], [S((x) => x * x), S((x) => x ** 3), S((x) => x ** 4)]];
+  const v = [S((_, y) => y), S((x, y) => x * y), S((x, y) => x * x * y)];
+  // gaussian elimination
+  for (let i = 0; i < 3; i++) {
+    const piv = m[i]![i]!;
+    for (let j = i; j < 3; j++) m[i]![j]! /= piv;
+    v[i]! /= piv;
+    for (let r = 0; r < 3; r++) if (r !== i) { const f = m[r]![i]!; for (let j = i; j < 3; j++) m[r]![j]! -= f * m[i]![j]!; v[r]! -= f * v[i]!; }
+  }
+  const [a, b, c] = v as [number, number, number];
+  const out = [...arr];
+  for (let x = n + 1; x <= to; x++) out.push(Math.round(a + b * x + c * x * x));
+  return out;
+}
+if (awakened) {
+  const caps = awakened.caps;
+  for (const [name, def] of Object.entries<any>(awakened.classes)) {
+    const base = jobs[def.base];
+    if (!base) continue;
+    const aspd: Record<string, number> = { ...base.aspd };
+    if (def.aspd) {
+      // page gives bare-hand base ASPD + per-weapon penalty; the engine wants attack delay = (200 - ASPD) * 10
+      aspd.NONE = (200 - def.aspd.base) * 10;
+      for (const [w, pen] of Object.entries<number>(def.aspd.penalty)) {
+        if (w === "SHIELD") aspd.SHIELD = -pen * 10; // added to the delay when a shield is worn
+        else aspd[w] = (200 - (def.aspd.base + pen)) * 10;
+      }
+    }
+    jobs[name] = {
+      ...base,
+      key: name,
+      baseClass: def.base,
+      awakened: true,
+      hp: extrapolate(base.hp, caps.baseLevel),
+      sp: extrapolate(base.sp, caps.baseLevel),
+      hpApproxFrom: base.hp.length + 1,
+      aspd,
+      aspdApprox: !def.aspd,
+      caps,
+    };
+  }
+}
 const ENCHANT_PATH = resolve(import.meta.dir, "../../data/enchant_pools.json");
 /** Read on every request (a few KB) so edits to the hand-maintained table show up without restarting the API. */
 const enchantPools = async () => ((await Bun.file(ENCHANT_PATH).exists()) ? Bun.file(ENCHANT_PATH).json() : { default: null, items: {} });
@@ -79,6 +134,8 @@ const app = new Elysia()
   .use(spriteRoutes)
   .get("/api/health", () => ({ ok: true }))
   .get("/api/jobs", () => jobs)
+  // Awakened-class rules: level / stat / ASPD caps and the cumulative stat-point tables
+  .get("/api/awakened", () => awakened ?? { caps: null, statPoints: null, classes: {} })
   // NPC enchant rules per item (hand-maintained data/enchant_pools.json; the client has no enchant data)
   .get("/api/enchant-pools", () => enchantPools())
 

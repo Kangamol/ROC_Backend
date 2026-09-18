@@ -1,0 +1,397 @@
+{
+ "_doc": "Gnjoy RO Classic Awakened classes (roc.gnjoy.in.th/patch/awakend-skill-ragnarok-online-classic/). aspd.base = bare-hand base ASPD from the page images, penalty = per weapon (SHIELD is added on top). The engine converts to attack delay: delay = (200 - aspd) * 10. Whitesmith/Creator ASPD images are missing on the page → base class table is used. Stalker Axe was printed as -159 (typo) → -15. HP/SP for Lv 100-120 are NOT published — the API extrapolates the base class curve (flag hpApproxFrom).",
+ "source": "https://roc.gnjoy.in.th/patch/awakend-skill-ragnarok-online-classic/",
+ "caps": {
+  "baseLevel": 120,
+  "jobLevel": 75,
+  "stat": 130,
+  "statFrom": 100,
+  "statBelow": 99,
+  "aspd": 193
+ },
+ "statPoints": {
+  "_doc": "cumulative status points at each base level (index 0 = Lv1). hiClass = transcendent classes (Lv1 = 100); normal = every other class incl. Awakened (Lv1 = 48), goes to Lv120",
+  "hiClass": [
+   100,
+   103,
+   106,
+   109,
+   112,
+   116,
+   120,
+   124,
+   128,
+   132,
+   137,
+   142,
+   147,
+   152,
+   157,
+   163,
+   169,
+   175,
+   181,
+   187,
+   194,
+   201,
+   208,
+   215,
+   222,
+   230,
+   238,
+   246,
+   254,
+   262,
+   271,
+   280,
+   289,
+   298,
+   307,
+   317,
+   327,
+   337,
+   347,
+   357,
+   368,
+   379,
+   390,
+   401,
+   412,
+   424,
+   436,
+   448,
+   460,
+   472,
+   485,
+   498,
+   511,
+   524,
+   537,
+   551,
+   565,
+   579,
+   593,
+   607,
+   622,
+   637,
+   652,
+   667,
+   682,
+   698,
+   714,
+   730,
+   746,
+   762,
+   779,
+   796,
+   813,
+   830,
+   847,
+   865,
+   883,
+   901,
+   919,
+   937,
+   956,
+   975,
+   994,
+   1013,
+   1032,
+   1052,
+   1072,
+   1092,
+   1112,
+   1132,
+   1153,
+   1174,
+   1195,
+   1216,
+   1237,
+   1259,
+   1281,
+   1303,
+   1325
+  ],
+  "normal": [
+   48,
+   51,
+   54,
+   57,
+   60,
+   64,
+   68,
+   72,
+   76,
+   80,
+   85,
+   90,
+   95,
+   100,
+   105,
+   111,
+   117,
+   123,
+   129,
+   135,
+   142,
+   149,
+   156,
+   163,
+   170,
+   178,
+   186,
+   194,
+   202,
+   210,
+   219,
+   228,
+   237,
+   246,
+   255,
+   265,
+   275,
+   285,
+   295,
+   305,
+   316,
+   327,
+   338,
+   349,
+   360,
+   372,
+   384,
+   396,
+   408,
+   420,
+   433,
+   446,
+   459,
+   472,
+   485,
+   499,
+   513,
+   527,
+   541,
+   555,
+   570,
+   585,
+   600,
+   615,
+   630,
+   646,
+   662,
+   678,
+   694,
+   710,
+   727,
+   744,
+   761,
+   778,
+   795,
+   813,
+   831,
+   849,
+   867,
+   885,
+   904,
+   923,
+   942,
+   961,
+   980,
+   1000,
+   1020,
+   1040,
+   1060,
+   1080,
+   1101,
+   1122,
+   1143,
+   1164,
+   1185,
+   1207,
+   1229,
+   1251,
+   1273,
+   1295,
+   1318,
+   1341,
+   1364,
+   1387,
+   1410,
+   1433,
+   1456,
+   1479,
+   1502,
+   1525,
+   1549,
+   1573,
+   1597,
+   1621,
+   1645,
+   1669,
+   1693,
+   1717,
+   1741,
+   1765
+  ]
+ },
+ "classes": {
+  "Awakened Lord Knight": {
+   "base": "Lord Knight",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -10,
+     "SWORD_1H": -12,
+     "SWORD_2H": -15,
+     "AXE_1H": -18,
+     "AXE_2H": -20,
+     "MACE": -5,
+     "SPEAR_1H": -8,
+     "SPEAR_2H": -12,
+     "SHIELD": -5
+    }
+   }
+  },
+  "Awakened Paladin": {
+   "base": "Paladin",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -7,
+     "SWORD_1H": -5,
+     "SWORD_2H": -9,
+     "AXE_1H": -8,
+     "AXE_2H": -12,
+     "MACE": -4,
+     "SPEAR_1H": -10,
+     "SPEAR_2H": -10,
+     "SHIELD": -5
+    }
+   }
+  },
+  "Awakened High Priest": {
+   "base": "High Priest",
+   "aspd": {
+    "base": 151,
+    "penalty": {
+     "MACE": 0,
+     "STAFF_1H": -15,
+     "STAFF_2H": -10,
+     "BOOK": 1,
+     "KNUCKLE": -5,
+     "SHIELD": -5
+    }
+   }
+  },
+  "Awakened Champion": {
+   "base": "Champion",
+   "aspd": {
+    "base": 158,
+    "penalty": {
+     "MACE": -5,
+     "STAFF_1H": -10,
+     "STAFF_2H": -12,
+     "KNUCKLE": -1,
+     "SHIELD": -5
+    }
+   }
+  },
+  "Awakened High Wizard": {
+   "base": "High Wizard",
+   "aspd": {
+    "base": 151,
+    "penalty": {
+     "DAGGER": -7,
+     "STAFF_1H": -5,
+     "STAFF_2H": -5,
+     "SHIELD": -5
+    }
+   }
+  },
+  "Awakened Professor": {
+   "base": "Professor",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -10,
+     "STAFF_1H": -5,
+     "STAFF_2H": -5,
+     "BOOK": -5,
+     "SHIELD": -5
+    }
+   }
+  },
+  "Awakened Whitesmith": {
+   "base": "Whitesmith",
+   "aspd": null
+  },
+  "Awakened Creator": {
+   "base": "Creator",
+   "aspd": null
+  },
+  "Awakened Sniper": {
+   "base": "Sniper",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -10,
+     "BOW": -9,
+     "SHIELD": -8
+    }
+   }
+  },
+  "Awakened Clown": {
+   "base": "Clown",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -12,
+     "BOW": -10,
+     "INSTRUMENT": -5,
+     "WHIP": -5,
+     "SHIELD": -7
+    }
+   }
+  },
+  "Awakened Gypsy": {
+   "base": "Gypsy",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -12,
+     "BOW": -10,
+     "INSTRUMENT": -5,
+     "WHIP": -5,
+     "SHIELD": -7
+    }
+   }
+  },
+  "Awakened Assassin Cross": {
+   "base": "Assassin Cross",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -2,
+     "SWORD_1H": -25,
+     "AXE_1H": -40,
+     "KATAR": -2,
+     "SHIELD": -9
+    }
+   }
+  },
+  "Awakened Stalker": {
+   "base": "Stalker",
+   "aspd": {
+    "base": 156,
+    "penalty": {
+     "DAGGER": -3,
+     "SWORD_1H": -7,
+     "AXE_1H": -15,
+     "BOW": -2,
+     "SHIELD": -5
+    }
+   }
+  }
+ }
+}

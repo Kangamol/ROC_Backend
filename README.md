@@ -89,6 +89,7 @@ equipment in the same position. Weapons/shields are not rendered yet.
 | Method | Path | Notes |
 |---|---|---|
 | GET | `/api/jobs` | per-job base HP/SP per level, ASPD per weapon, job-level stat bonuses, max weight (`data/jobs.json`, built by `tools/build_job_data.py` from rAthena **pre-re** job tables — job data only, never items) |
+| GET | `/api/awakened` | Gnjoy Awakened-class rules from `data/awakened.json`: caps (Lv 120/75, stats 130 from Lv 100, ASPD 193) and cumulative stat-point tables. `/api/jobs` also contains the 13 `Awakened …` classes, derived from the base class: HP/SP extrapolated past 99 (`hpApproxFrom`), ASPD converted from the page's per-class tables |
 | GET | `/api/enchant-pools` | NPC enchant rules per item (`data/enchant_pools.json`, hand-maintained from Gnjoy pages — the client has no enchant data). Enchants occupy card positions 4 → 3 → 2, like the game; items not listed fall back to the generic Hidden Enchant (STR–LUK +1~+3) |
 | GET | `/api/meta` | counts per itemType / equipLocation |
 | GET | `/api/items` | `search`, `type`, `subType`, `location`, `cardLocation`, `slots`, `limit`, `offset` |
