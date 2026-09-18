@@ -113,9 +113,20 @@ P_STONE_DESC = re.compile(r'(?:costume\s*(?:ส่วน|ประเภท)?\s*
                           r'|slot\s*ของ\s*(upper|middle|lower|garment))', re.I)
 P_STONE_TEXT = re.compile(r'slot|สล็อต|enchant|ติดตั้ง|costume|คอสตูม', re.I)
 
-# Zodiac hat enchants (NPC <Zodiac> Baryo Girl): slot-4 options Mettle / Magic Essence / Acute / Master Archer /
-# Adamantine / Affection Lv.1–10 (29061–29120) and the per-sign Gem that goes into slot 3.
-ZODIAC_ENCHANTS = set(range(29061, 29121)) | {314879, 300753, 300786, 315108, 315170, 315314, 315391, 315643, 315719}
+# Every option ID referenced by data/enchant_pools.json is an NPC enchant (Zodiac Mettle/…/Gems, Battle Pass
+# Hit Plus / Spirit of Knight / [Event] X's Memory …). The client files them as ETC; we expose them as CARD/ENCHANT
+# so the enchant picker can list them and they never show up as ordinary cards. 29061–29120 are the Zodiac
+# slot-4 families Lv.1–10 (the table only lists Lv.1–4, the rest exist in the client).
+def _pool_option_ids():
+    path = ROOT / 'data' / 'enchant_pools.json'
+    ids = set(range(29061, 29121))
+    if path.exists():
+        pools = json.load(open(path, encoding='utf-8'))
+        for rule in [pools.get('default')] + list(pools.get('items', {}).values()):
+            for slot in (rule or {}).get('slots', []):
+                ids.update(slot.get('options') or [])
+    return ids
+ZODIAC_ENCHANTS = _pool_option_ids()
 
 def is_stone_card_form(item_id):
     return 29000 <= item_id < 30000 or 310000 <= item_id < 320000
