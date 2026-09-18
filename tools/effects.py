@@ -9,6 +9,7 @@ Output of parse_effects(lines):
                 statMin:   [{stat, min, refine?, bonuses}], applies once base stat >= min (and refine >= refine)
                 level:     [{min?, max?, bonuses}],        applies while min <= base level <= max
                 perLevel:  [{every, min?, max?, bonuses}], bonuses * floor(min(baseLv, max) / every), once baseLv >= min
+                skillLevel:[{skill, every?, min?, bonuses}],  scales with / needs a learned skill level — shown, NOT summed
                 set:       [{requires: [names], bonuses}]}  all named items / cards must be worn
     "Base STR" / "Base Lv" always mean the character's own base value (what the player
     sets on the status window / level), never the total after item or job bonuses.
@@ -119,6 +120,14 @@ _BLV_LOOSE = r'(?:' + _BLV + r'|เลเวล(?!\s*ที่ต้องกา
 P_LEVEL_MIN_LOOSE = re.compile(r'(?:เมื่อ|หาก|ถ้า|ในกรณีที่)\s*' + _BLV_LOOSE + r'\s*(ตั้งแต่|มากกว่า)\s*(\d+)\s*(ขึ้นไป)?', re.I)
 P_LEVEL_MAX_LOOSE = re.compile(r'(?:เมื่อ|หาก|ถ้า|ในกรณีที่)\s*' + _BLV_LOOSE + r'\s*(?:น้อยกว่า|ต่ำกว่า)\s*(?:Level\s*)?(\d+)', re.I)
 # "(เมื่ออั[พป]เกรดตั้งแต่ขั้น 7 ขึ้นไป เพิ่มอีก 3%)", "(หากอั[พป]เกรดถึงขั้น 7 เพิ่มอีก 10)" nested inside a stat-threshold line
+# learned-skill scaling / thresholds — kept apart from the main totals (the simulator has no skill tree yet)
+_SKN = r'\[?\s*([A-Z][A-Za-z\'\- ]+?)\s*\]?'
+# "ทุก ๆ การเรียนรู้สกิล Iron Hand 1 เลเวล", "ทุกๆ การเรียนรู้สกิล Steel Crow 2 Level,"
+P_SKILL_EVERY_A = re.compile(r'ทุก\s*ๆ?\s*(?:การ)?เรียนรู้\s*(?:สกิล|Skill)\s*' + _SKN + r'\s*(\d+)\s*(?:Lv\.?|Level|เลเวล)', re.I)
+# "ทุก ๆ 1 Level ของสกิล Steel Crow", "ทุกๆ 1 เลเวลของสกิล [Dagger Throwing Practice ]", "ทุก 1 Lv. ของ Chain Action"
+P_SKILL_EVERY_B = re.compile(r'ทุก\s*ๆ?\s*(\d+)\s*(?:Lv\.?|Level|เลเวล)\s*(?:ของ)?\s*(?:สกิล|Skill)?\s*' + _SKN + r'(?=\s*(?:Skill)?\s*(?:,|เพิ่ม|ลด|จะ|[A-Z][A-Za-z]*\s*[+\-]|$))', re.I)
+# "เมื่อเรียนรู้สกิล Devotion ถึง Lv.5", "หากเรียนรู้สกิล [Smith Dagger] Lv.3,"
+P_SKILL_MIN = re.compile(r'(?:เมื่อ|หาก|ถ้า)\s*เรียนรู้\s*(?:สกิล|Skill)\s*' + _SKN + r'\s*(?:ถึง|ตั้งแต่)?\s*(?:Lv\.?|Level|เลเวล)\s*(\d+)', re.I)
 P_NESTED_REFINE = re.compile(r'\(\s*(?:เมื่อ|หาก)?\s*อั[พป]เกรด(?:ตั้งแต่|ถึง)?\s*(?:ขั้น|ระดับ)?\s*\+?\s*(\d+)\s*(?:ขึ้นไป)?\s*(.*?)\)')
 P_SET = re.compile(r'(?:(?:เมื่อ|หาก|ถ้า)\s*(?:สวม)?(?:ใส่|ติดตั้ง)\s*(?:ร่วมกัน)?\s*(?:กับ|คู่กับ|ร่วมกับ|รวมกันกับ|รวมกับ|พร้อมกับ)?|(?:สวม)?(?:ใส่|ติดตั้ง|ใช้)\s*(?:ร่วมกัน)?\s*(?:กับ|คู่กับ|ร่วมกับ|รวมกันกับ|รวมกับ|พร้อมกับ)|\[Set\])\s*(.+?)\s*(?:ร่วมกัน|ด้วยกัน|ทั้งหมดด้วยกัน|ทั้งหมด|,\s*$|$|(?=\s*(?:ลด|เพิ่ม|[A-Z][A-Za-z]+\s*[+\-]\s*\d)))', re.I)
 P_SET_TRIGGER = re.compile(r'\[Set\]|ร่วมกัน|ด้วยกัน|ร่วมกับ|รวมกันกับ|รวมกับ|คู่กับ|พร้อมกับ|(?:เมื่อ|หาก|ถ้า)\s*(?:สวม)?(?:ใส่|ติดตั้ง|ใช้)\s*(?:กับ)?\s+(?=[A-Z\[\"])', re.I)
@@ -127,7 +136,6 @@ P_SET_TRIGGER = re.compile(r'\[Set\]|ร่วมกัน|ด้วยกัน
 P_NOISE = re.compile(r'แลกเปลี่ยน|ไอเทมเช่า|Item เช่า|ระยะเวลาเช่า|ไม่สามารถ|ไม่มีวัน|ไม่เสียหาย|Ban Guild|WoE|PvP|PVP|Raid|Enchant Stone Box|Stone Box|<NAVI>|^[_―\-\s]*$|หมายเหตุ|ระวัง|Sillit|คลังเก็บ|ดูกลมกลืน|\*\*\*|Zodiac|มีโอกาส|โอกาส|สุ่ม|Autospell|Auto Spell|เมื่อฆ่า|เมื่อกำจัด|เมื่อสังหาร|ทุกครั้งที่|ทุก\s*ๆ?\s*\d+\s*วินาที|ทุก\s*\d+\s*วินาที|ถอด|เท่ากับ\s*(?:\d+\s*เท่าของ\s*)?Base|ขึ้นอยู่กับ\s*Base|ตาม\s*Base|ระดับ Refine\*', re.I)
 P_SKIP_EFFECT = re.compile(r'Global Cooldown|หลังโจมตี|ผลรวม|ค่าตีบวกของทั้งเซ็ต|ของเซ็ต|ของเซต|อั[พป]เกรดรวมกัน|เมื่อช่อง\s*Enchant'
                            r'|อั[พป]เกรดของ\s+[A-Z]|การอั[พป]เกรด\s+[A-Z][A-Za-z\' \[\]]+\d+\s*ขั้น'   # another item's refine level
-                           r'|เลเวลของสกิล|เรียนรู้สกิล|Lv\.?\s*ของ\s*(?:สกิล|Skill)|ทุก\s*ๆ?\s*\d*\s*Lv\.?\s*ของ'   # scales with a learned skill level
                            r'|(?:เป็นเวลา|ในระยะเวลา)\s*\d+\s*วินาที', re.I)                                  # timed buff
 
 
@@ -310,7 +318,7 @@ def _parse_clause(line):
         elif re.search(r'SP\s*(?:ที่ใช้|ในการ(?:ร่าย|ใช้))|การใช้\s*SP|ใช้\s*SP', text) and re.search(r'เพิ่ม|เสีย', text): _add(out, 'spCostPercent', -pct)
         elif re.search(r'ฟื้นฟู\s*HP.*ตามธรรมชาติ|(?:ความเร็ว|อัตรา)(?:ใน)?การฟื้น(?:ฟู)?\s*HP|HP\s*Recovery', text, re.I): _add(out, 'hpRecoveryPercent', pct)
         elif re.search(r'ฟื้นฟู\s*SP.*ตามธรรมชาติ|(?:ความเร็ว|อัตรา)(?:ใน)?การฟื้น(?:ฟู|ค่า)?\s*SP|SP\s*Recovery', text, re.I): _add(out, 'spRecoveryPercent', pct)
-        elif re.search(r'ปริมาณการฟื้นฟูของ\s*Skill|พลังฮีล|Heal(?:ing)?\s*(?:Power|Effect)|ฟื้นฟู.*ที่ตนเองใช้|ปริมาณการรักษา|ให้กับ\s*Heal|ค่า\s*Heal|สกิลประเภท\s*Heal|Heal\s*แรงขึ้น', text, re.I): _add(out, 'healPowerPercent', pct)
+        elif re.search(r'ปริมาณการฟื้นฟูของ\s*Skill|พลังฮีล|Heal(?:ing)?\s*(?:Power|Effect)|ฟื้นฟู.*ที่ตนเองใช้|ปริมาณการรักษา|ให้กับ\s*Heal|ค่า\s*Heal|สกิลประเภท\s*Heal|Heal\s*แรงขึ้น|ปริมาณ(?:การ)?\s*Heal|Heal\s*\+\s*\d', text, re.I): _add(out, 'healPowerPercent', pct)
         elif re.search(r'ประสิทธิภาพการฟื้นฟู|การฟื้นฟูที่ได้รับ|ไอเท็มฟื้นฟู|ไอเทมฟื้นฟู', text): _add(out, 'healReceivedPercent', pct)
         elif re.search(r'EXP|ค่าประสบการณ์', text, re.I):
             kind, tgt = _target(text) if re.search(r'เผ่า|ประเภท|race', text, re.I) else (None, None)
@@ -398,8 +406,8 @@ def _set_names(cond_line):
             n = re.sub(r'^[\u0E00-\u0E7F\s]+', '', n)                     # "ชุดเกราะ Toughen Time Keeper" → drop the Thai noun
             n = re.split(r'\s+(?:ที่|ซึ่ง)', n)[0]                       # "Fallen Angel Wing ที่อัพเกรดถึงขั้น 9" → item name only
             m_th = re.search(r'[\u0E00-\u0E7F].*$', n)
-            if m_th and not re.match(r'(?:ดังนี้|ดังต่อไปนี้|จะได้รับ|ทั้งหมด|ร่วมกัน|ด้วยกัน|เพิ่ม|ลด)', m_th.group(0)) \
-                    and not re.search(r'[+\-]\s*\d|\d+\s*%', cond_line):
+            if m_th and not re.search(r'[A-Za-z]', n[:m_th.start()]): continue   # "1 ขั้น" — leftover of another clause
+            if m_th and not re.search(r'ดังนี้|ดังต่อไปนี้|ได้รับ|ทั้งหมด|ร่วมกัน|ด้วยกัน|เพิ่ม|ลด|ทุก|เพิกเฉย|ไม่สนใจ|\d', m_th.group(0)):
                 return []   # "เมื่อใช้ร่วมกับชุดเกราะ Toughen Time Keeper รู้สึกได้ถึงความบางเบา…" — flavour text, not a set header
             n = re.sub(r'[\u0E00-\u0E7F].*$', '', n).strip(' ,.')        # drop a trailing Thai clause
             if n and re.search(r'[A-Za-z]', n): names.append(n)
@@ -409,6 +417,17 @@ def _set_names(cond_line):
 
 def _each_n(m):
     return int(m.group(1)) if m.group(1) else TH_NUM[m.group(2)] if m.group(2) else int(m.group(3) or 1)
+
+
+def _cond_skill(line):
+    """('skilllv', skill, every, min) for bonuses that scale with / need a learned skill level, plus the span to strip."""
+    m = P_SKILL_EVERY_A.search(line)
+    if m: return ('skilllv', m.group(1).strip(), int(m.group(2)), None), m.span()
+    m = P_SKILL_EVERY_B.search(line)
+    if m: return ('skilllv', m.group(2).strip(), int(m.group(1)), None), m.span()
+    m = P_SKILL_MIN.search(line)
+    if m: return ('skilllv', m.group(1).strip(), None, int(m.group(2))), m.span()
+    return None, None
 
 
 def _cond_statmin(line):
@@ -516,6 +535,7 @@ def parse_effects(lines):
         m_each = P_COND_EACH.search(line)
         m_min = P_COND_MIN.search(line)
         c_statmin, m_statmin = _cond_statmin(line)
+        c_skill, skill_span = _cond_skill(line)
         c_level, level_spans, level_line = _cond_level(line)
         m_eq = P_EQUALS_STAT.search(line)
         if pending_set is not None:
@@ -534,8 +554,17 @@ def parse_effects(lines):
             if not alts and not (line.rstrip().endswith((',', ':')) or re.search(r'ดังนี้|ดังต่อไปนี้|จะได้รับ|ชนิด|ประเภท|Lv\.?\s*\d|Enchant', line)):
                 m_set = None   # flavour sentence that merely mentions wearing something — not a condition
             cond = None if m_set is None else ('set', tuple(tuple(a) for a in alts)) if alts else ('skip',)
+        inner_gate = None   # set / refine wording earlier on the same line gates the inner condition
+        if cond is not None and cond[0] == 'set' and (c_skill or m_each) :
+            inner_gate = (None, cond[1][0], None)
+            cond = None
+        elif cond is None and c_skill and m_min and m_min.start() < skill_span[0]:
+            inner_gate = (int(m_min.group(1)), None, None)
         if cond is not None:
             pass
+        elif c_skill:
+            cond = c_skill
+            body = _strip(line, [skill_span])
         elif m_stat and (m_stat.group(1) or m_stat.group(3)) and not (c_statmin and m_statmin.start() < m_stat.start()):
             every = int(m_stat.group(1) or m_stat.group(3))
             cond = ('stat', m_stat.group(2).lower(), every, None)
@@ -574,13 +603,14 @@ def parse_effects(lines):
         if cond is not None and cond[0] != 'skip':
             # inside a set block only refine-type conditions nest ("ทุก ๆ การอัพเกรด 1 ขั้นของ Greaves …");
             # a base-stat / level line after a set block is a new top-level clause (Probation weapons)
-            nests = outer and cond[0] != outer[0] and (outer[0] != 'set' or cond[0] in ('min', 'each'))
+            nests = outer and cond[0] != outer[0] and (outer[0] != 'set' or cond[0] in ('min', 'each', 'skilllv'))
             if nests:
                 if outer[0] == 'min': gate = (outer[1], None, None)
                 elif outer[0] == 'set': gate = (None, outer[1][0], None)   # a nested condition inherits the first alternative
                 else: gate = (outer[-1][0], outer[-1][1], (outer[1], outer[2]))
             else:
                 outer = None
+            if inner_gate: gate = tuple(a if a is not None else b for a, b in zip(inner_gate, gate))
             cond = with_gate(cond, gate)
 
         cap = P_STAT_CAP.search(line)
@@ -671,6 +701,7 @@ def parse_effects(lines):
         elif kind == 'statmin': cond.setdefault('statMin', []).append(gated({'stat': key[1], 'min': key[2]}, gate) | {'bonuses': v})
         elif kind == 'level':  cond.setdefault('level', []).append(gated({'min': key[1], 'max': key[2]}, gate) | {'bonuses': v})
         elif kind == 'perlevel': cond.setdefault('perLevel', []).append(gated({'every': key[1], 'min': key[2], 'max': key[3]}, gate) | {'bonuses': v})
+        elif kind == 'skilllv': cond.setdefault('skillLevel', []).append(gated({'skill': key[1], 'every': key[2], 'min': key[3]}, gate) | {'bonuses': v})
         elif kind == 'set':
             for alt in key[1]: cond.setdefault('set', []).append(gated({'requires': list(alt)}, (gate[0], None, gate[2])) | {'bonuses': v})
     if 'refine' in cond:
