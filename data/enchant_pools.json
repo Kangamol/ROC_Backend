@@ -2247,7 +2247,7 @@
    "name": "Battle Pass Armor Enchant (Zodiac Mail, SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/equipment-pass/",
    "verified": true,
-   "note": "ต้อง +9 ขึ้นไป, BP Lv ≥100. ช่อง 4 → 3 → 2 ตามลำดับ ต้องอัพออปชันช่องก่อนหน้าถึง Lv.5 ก่อน. ช่อง 4/3: Hit Plus, SP, HP, DEF, MDEF, FLEE Lv.1–5 (Lv1 100%, อัพ Lv2–5 60/50/40/30%). ช่อง 2: [Event] X's Memory เลือกได้ 50%. Reset ได้ (ทั้งหมด / เฉพาะช่อง 2 20M). อัพเกรดไอเทมหลัง enchant → ออปชันหาย",
+   "note": "ต้อง +9 ขึ้นไป, BP Lv ≥100. ช่อง 4 → 3 → 2 ตามลำดับ ต้องอัพออปชันช่องก่อนหน้าถึง Lv.5 ก่อน. ช่อง 4/3: Hit Plus, SP, HP, DEF, MDEF, FLEE Lv.1–5 (Lv1 100%, อัพ Lv2–5 60/50/40/30%). ช่อง 2: [Event] X's Memory เลือกได้ 50%. Reset ได้ (ทั้งหมด / เฉพาะช่อง 2 20M). อัพเกรดไอเทมหลัง enchant → ออปชันหาย (ผู้ใช้ยืนยัน 2026-09-18 ว่า Pass SS5 ให้ Zodiac Mail)",
    "slots": [
     {
      "position": 4,
@@ -5146,7 +5146,7 @@
    "name": "Battle Pass Infinity Boots Enchant (SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/baphomet-infinity-shadows-beyond-the-rift-equipment-pass-battle-pass-iv/",
    "verified": true,
-   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). หน้าเว็บไม่ระบุขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องมีช่อง 4 ก่อน (ยึดตามกติกา 'ถึงระดับสูงสุดก่อน' ของ BP อื่น → Lv.4). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
+   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). ไม่มีขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องอัพช่อง 4 ถึง Lv.4 ก่อน (ยืนยันโดยผู้ใช้ 2026-09-18). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
    "slots": [
     {
      "position": 4,
@@ -5204,7 +5204,7 @@
    "name": "Battle Pass Infinity Boots Enchant (SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/baphomet-infinity-shadows-beyond-the-rift-equipment-pass-battle-pass-iv/",
    "verified": true,
-   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). หน้าเว็บไม่ระบุขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องมีช่อง 4 ก่อน (ยึดตามกติกา 'ถึงระดับสูงสุดก่อน' ของ BP อื่น → Lv.4). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
+   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). ไม่มีขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องอัพช่อง 4 ถึง Lv.4 ก่อน (ยืนยันโดยผู้ใช้ 2026-09-18). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
    "slots": [
     {
      "position": 4,
@@ -5262,7 +5262,7 @@
    "name": "Battle Pass Infinity Boots Enchant (SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/baphomet-infinity-shadows-beyond-the-rift-equipment-pass-battle-pass-iv/",
    "verified": true,
-   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). หน้าเว็บไม่ระบุขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องมีช่อง 4 ก่อน (ยึดตามกติกา 'ถึงระดับสูงสุดก่อน' ของ BP อื่น → Lv.4). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
+   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). ไม่มีขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องอัพช่อง 4 ถึง Lv.4 ก่อน (ยืนยันโดยผู้ใช้ 2026-09-18). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
    "slots": [
     {
      "position": 4,
@@ -5320,7 +5320,7 @@
    "name": "Battle Pass Infinity Boots Enchant (SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/baphomet-infinity-shadows-beyond-the-rift-equipment-pass-battle-pass-iv/",
    "verified": true,
-   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). หน้าเว็บไม่ระบุขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องมีช่อง 4 ก่อน (ยึดตามกติกา 'ถึงระดับสูงสุดก่อน' ของ BP อื่น → Lv.4). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
+   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). ไม่มีขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องอัพช่อง 4 ถึง Lv.4 ก่อน (ยืนยันโดยผู้ใช้ 2026-09-18). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
    "slots": [
     {
      "position": 4,
@@ -5378,7 +5378,7 @@
    "name": "Battle Pass Infinity Boots Enchant (SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/baphomet-infinity-shadows-beyond-the-rift-equipment-pass-battle-pass-iv/",
    "verified": true,
-   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). หน้าเว็บไม่ระบุขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องมีช่อง 4 ก่อน (ยึดตามกติกา 'ถึงระดับสูงสุดก่อน' ของ BP อื่น → Lv.4). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
+   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). ไม่มีขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องอัพช่อง 4 ถึง Lv.4 ก่อน (ยืนยันโดยผู้ใช้ 2026-09-18). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
    "slots": [
     {
      "position": 4,
@@ -5436,7 +5436,7 @@
    "name": "Battle Pass Infinity Boots Enchant (SV Baphomet)",
    "source": "https://roc.gnjoy.in.th/event/baphomet-infinity-shadows-beyond-the-rift-equipment-pass-battle-pass-iv/",
    "verified": true,
-   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). หน้าเว็บไม่ระบุขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องมีช่อง 4 ก่อน (ยึดตามกติกา 'ถึงระดับสูงสุดก่อน' ของ BP อื่น → Lv.4). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
+   "note": "ช่อง 4: Fighting Spirit / Expert Archer / Spell / Vitality / Attack Speed / Lucky Lv.1–4 (100/200/300/400 Medal). ช่อง 3: สุ่ม Special 1 ใน 6 (Bear's Power, Hawkeye, Lucky Day, Muscle Fool, Runaway Magic, Speed of Light — เป็นบัฟ proc ไม่ถูกรวมในผลรวม). ไม่มีขั้นตีบวกขั้นต่ำ; ช่อง 3 ต้องอัพช่อง 4 ถึง Lv.4 ก่อน (ยืนยันโดยผู้ใช้ 2026-09-18). Reset: ทั้งหมด 5M / เฉพาะช่อง 3 20M",
    "slots": [
     {
      "position": 4,
