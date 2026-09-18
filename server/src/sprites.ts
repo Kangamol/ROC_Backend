@@ -28,6 +28,7 @@ export const JOBS: [string, string, string][] = [
   ["stalker", "Stalker", "스토커"], ["creator", "Creator", "크리에이터"], ["clown", "Clown", "클라운"], ["gypsy", "Gypsy", "집시"],
   ["super_novice", "Super Novice", "슈퍼노비스"], ["taekwon", "Taekwon", "태권소년"], ["star_gladiator", "Star Gladiator", "권성"],
   ["soul_linker", "Soul Linker", "소울링커"], ["ninja", "Ninja", "닌자"], ["gunslinger", "Gunslinger", "건너"],
+  ["rebellion", "Rebellion", "리벨리온"],   // Kagerou / Oboro have no body sprite in this client → the app falls back to Ninja
 ];
 const JOB_KO = new Map(JOBS.map(([key, , ko]) => [key, ko]));
 

@@ -1,10 +1,10 @@
 {
- "_doc": "Gnjoy RO Classic Awakened classes (roc.gnjoy.in.th/patch/awakend-skill-ragnarok-online-classic/). aspd.base = bare-hand base ASPD from the page images, penalty = per weapon (SHIELD is added on top). The engine converts to attack delay: delay = (200 - aspd) * 10. Whitesmith/Creator ASPD images are missing on the page → base class table is used. Stalker Axe was printed as -159 (typo) → -15. HP/SP for Lv 100-120 are NOT published — the API extrapolates the base class curve (flag hpApproxFrom).",
+ "_doc": "Gnjoy RO Classic Awakened classes (roc.gnjoy.in.th/patch/awakend-skill-ragnarok-online-classic/). aspd.base = bare-hand base ASPD from the page images, penalty = per weapon (SHIELD is added on top). The engine converts to attack delay: delay = (200 - aspd) * 10. Whitesmith/Creator ASPD images are missing on the page → base class table is used. Stalker Axe was printed as -159 (typo) → -15. HP/SP for Lv 100-120 are NOT published — the API extrapolates the base class curve (flag hpApproxFrom). User (plays the server) says the in-game stat cap is 120, not the 130 printed on the page — 120 is used. `extended` = 2nd Extended classes (Kagerou/Oboro from Ninja, Rebellion from Gunslinger): Lv 120 / Job 60, stats to 120 from Lv 100.",
  "source": "https://roc.gnjoy.in.th/patch/awakend-skill-ragnarok-online-classic/",
  "caps": {
   "baseLevel": 120,
   "jobLevel": 75,
-  "stat": 130,
+  "stat": 120,
   "statFrom": 100,
   "statBelow": 99,
   "aspd": 193
@@ -391,6 +391,28 @@
      "BOW": -2,
      "SHIELD": -5
     }
+   }
+  }
+ },
+ "extended": {
+  "_source": "https://roc.gnjoy.in.th/patch/ragnarok-online-classic-update-2nd-high-extended/ (Kagerou/Oboro: Ninja 99/70 → unlock 120/60)",
+  "caps": {
+   "baseLevel": 120,
+   "jobLevel": 60,
+   "stat": 120,
+   "statFrom": 100,
+   "statBelow": 99,
+   "aspd": 190
+  },
+  "classes": {
+   "Kagerou": {
+    "base": "Ninja"
+   },
+   "Oboro": {
+    "base": "Ninja"
+   },
+   "Rebellion": {
+    "base": "Gunslinger"
    }
   }
  }

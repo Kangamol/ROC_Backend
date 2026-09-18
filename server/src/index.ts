@@ -95,6 +95,26 @@ function extrapolate(arr: number[], to: number): number[] {
   for (let x = n + 1; x <= to; x++) out.push(Math.round(a + b * x + c * x * x));
   return out;
 }
+/** Derive a class entry from its base class: HP/SP continued to the new cap, own limits attached. */
+function deriveClass(name: string, def: any, caps: any, flags: Record<string, unknown>) {
+  const base = jobs[def.base];
+  if (!base) return;
+  jobs[name] = {
+    ...base,
+    key: name,
+    baseClass: def.base,
+    ...flags,
+    hp: extrapolate(base.hp, caps.baseLevel),
+    sp: extrapolate(base.sp, caps.baseLevel),
+    hpApproxFrom: base.hp.length + 1,
+    caps,
+  };
+  return jobs[name];
+}
+if (awakened?.extended) {
+  // 2nd Extended classes (Kagerou / Oboro / Rebellion): Lv 120 / Job 60, stats to 120 from Lv 100
+  for (const [name, def] of Object.entries<any>(awakened.extended.classes)) deriveClass(name, def, awakened.extended.caps, { extended: true });
+}
 if (awakened) {
   const caps = awakened.caps;
   for (const [name, def] of Object.entries<any>(awakened.classes)) {
