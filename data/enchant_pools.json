@@ -8274,7 +8274,7 @@
    "name": "Purified Knight's Shield Enchant (Gold Angel Idol)",
    "source": "https://roc.gnjoy.in.th/promotion/cursed-knights-scroll/",
    "verified": true,
-   "note": "Gold Angel Idol จาก NPC Cursed Knight (Itemmall). ใส่การ์ด/ตีบวกก่อน Enchant → การ์ด/ขั้นตีบวกหาย. Random Option ช่วง min–max ผู้ใช้กรอกค่าที่ได้ ('Negates size penalty' ในลิสต์ 3 ยังไม่รองรับ)",
+   "note": "Gold Angel Idol จาก NPC Cursed Knight (Itemmall). ใส่การ์ด/ตีบวกก่อน Enchant → การ์ด/ขั้นตีบวกหาย. Random Option ช่วง min–max ผู้ใช้กรอกค่าที่ได้",
    "slots": [],
    "randomOptions": [
     {
@@ -9108,6 +9108,13 @@
        "min": 30,
        "max": 60,
        "unit": "%"
+      },
+      {
+       "key": "ignoreSizePenalty",
+       "label": "Negates size penalty (ยกเลิกโทษขนาดอาวุธ)",
+       "min": 1,
+       "max": 1,
+       "unit": ""
       },
       {
        "key": "aspd",

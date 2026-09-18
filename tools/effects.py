@@ -395,6 +395,10 @@ def _parse_clause(line):
             if dk in ('phys', 'both'): _add(out, f'ignoreDef:{k2}:{t2}', 100)
             if dk in ('magic', 'both'): _add(out, f'ignoreMdef:{k2}:{t2}', 100)
 
+    # --- weapon size penalty removed (Drake Card, "ยกเลิกการลงโทษขนาดของอาวุธ") — a flag, value 1 ---
+    if re.search(r'ยกเลิก(?:การลง)?โทษ(?:ของ)?\s*(?:Penalty\s*)?ขนาด|โจมตีศัตรูทุกขนาดได้ด้วยพลังโจมตี\s*100\s*%|ไม่(?:สนใจ|คิด)(?:การลง)?โทษขนาด|size\s*penalty', text, re.I):
+        out['ignoreSizePenalty'] = 1
+
     # --- granted skill "สามารถใช้ [X] Lv.N ได้" -------------------------------
     m = re.search(r'สามารถใช้\s*(?:สกิล)?\s*\[?([A-Z][A-Za-z\'\-\. ]+?)\]?\s*Lv\.?\s*(\d+)', text)
     if m: out[f'skill:{m.group(1).strip()}'] = int(m.group(2))
