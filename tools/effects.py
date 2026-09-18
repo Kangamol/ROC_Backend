@@ -86,8 +86,8 @@ _FCT = (r'(?:(?:ระยะ)?(?:เวลา)?(?:ใน)?(?:การ)?ร่�
 # "ลด Fixed Cast Time ของสกิล X 0.5 วินาที", "ลดระยะเวลาร่ายแบบคงที่ของสกิล [A], [B] 50%"
 P_FCT_SKILL = re.compile(r'(?:ลด\s*)?' + _FCT + r'\s*(?:ของ|ให้กับ)?\s*(?:สกิล|Skill)\s*.+?(?:ลง|ลดลง)?\s*(\d+(?:\.\d+)?)\s*(วินาที|%)', re.I)
 P_FCT_DOWN = re.compile(r'(?:ลด\s*' + _FCT + r'|' + _FCT + r'\s*ลดลง)(?:\s*ของ\s*(?:สกิล|Skill))?\s*(?:ลดลง|' + _MORE_WORDS + r'|\s)*-?\s*(\d+(?:\.\d+)?)\s*(วินาที|%|(?=\s*(?:,|$)))', re.I)
-_ACD = r'(?:After\s*Cast\s*Delay|ACD|(?:สกิล)?\s*(?:Delay|ดีเลย์)(?:\s*(?:หลัง(?:จาก)?(?:การ)?|ใน(?:การ)?)ใช้(?:งาน)?สกิล)?)'
-P_ACD_DOWN = re.compile(r'(?:ลด\s*' + _ACD + r'|' + _ACD + r'\s*ลดลง)\s*' + _MORE + r'(\d+(?:\.\d+)?)\s*%', re.I)
+_ACD = r'(?:After\s*Cast\s*Delay|ACD|Global\s*Cooldown|(?:สกิล)?\s*(?:Delay|ดีเลย์)(?:\s*(?:หลัง(?:จาก)?(?:การ)?|ใน(?:การ)?)ใช้(?:งาน)?สกิล)?)'
+P_ACD_DOWN = re.compile(r'(?:ลด\s*' + _ACD + r'|' + _ACD + r'\s*(?:ลดลง|-))\s*' + _MORE + r'(\d+(?:\.\d+)?)\s*%', re.I)
 P_ACD_UP = re.compile(r'เพิ่ม\s*' + _ACD + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
 # "ลดระยะเวลาในการร่ายเวทย์คิดเป็น% ตามการอั[พป]เกรดหมวก"  → 1% per refine
 P_RECOV = re.compile(r'(ลด|เพิ่ม)?\s*(?:อัตรา|ความเร็ว)?(?:ใน)?(?:การ)?ฟื้น(?:ฟู|ค่า)?\s*(HP|SP)(?:\s*[,/]\s*(?:และ\s*)?(HP|SP))?(?:\s*ตามธรรมชาติ)?\s*(?:ลง|ขึ้น|อีก|\s)*(\d+(?:\.\d+)?)\s*%|(HP|SP)\s*Recovery\s*(?:Rate)?\s*\+?\s*(\d+(?:\.\d+)?)\s*%', re.I)
@@ -141,7 +141,7 @@ P_SET_TRIGGER = re.compile(r'\[Set\]|ร่วมกัน|ด้วยกัน
 
 # lines that carry no stat effect (so they are not reported as unparsed)
 P_NOISE = re.compile(r'แลกเปลี่ยน|ไอเทมเช่า|Item เช่า|ระยะเวลาเช่า|ไม่สามารถ|ไม่มีวัน|ไม่เสียหาย|Ban Guild|WoE|PvP|PVP|Raid|Enchant Stone Box|Stone Box|<NAVI>|^[_―\-\s]*$|หมายเหตุ|ระวัง|Sillit|คลังเก็บ|ดูกลมกลืน|\*\*\*|Zodiac|มีโอกาส|โอกาส|สุ่ม|Autospell|Auto Spell|เมื่อฆ่า|เมื่อกำจัด|เมื่อสังหาร|ทุกครั้งที่|ทุก\s*ๆ?\s*\d+\s*วินาที|ทุก\s*\d+\s*วินาที|ถอด|เท่ากับ\s*(?:\d+\s*เท่าของ\s*)?Base|ขึ้นอยู่กับ\s*Base|ตาม\s*Base|ระดับ Refine\*', re.I)
-P_SKIP_EFFECT = re.compile(r'Global Cooldown|หลังโจมตี|ผลรวม|ค่าตีบวกของทั้งเซ็ต|ของเซ็ต|ของเซต|อั[พป]เกรดรวมกัน|เมื่อช่อง\s*Enchant'
+P_SKIP_EFFECT = re.compile(r'หลังโจมตี|ผลรวม|ค่าตีบวกของทั้งเซ็ต|ของเซ็ต|ของเซต|อั[พป]เกรดรวมกัน|เมื่อช่อง\s*Enchant'
                            r'|อั[พป]เกรดของ\s+[A-Z]|การอั[พป]เกรด\s+(?!Headgear)[A-Z][A-Za-z\' \[\]]+\d+\s*ขั้น'   # another item's refine level (the host "Headgear" is fine)
                            r'|(?:เป็นเวลา|ในระยะเวลา)\s*\d+\s*วินาที', re.I)                                  # timed buff
 
@@ -166,7 +166,7 @@ def _kind(line):
 def _target(line):
     m = P_SKILL.search(line)
     if m and not re.search(r'สามารถใช้', line):
-        return 'skill', m.group(1).strip()
+        return 'skill', m.group(1).strip(' -.')
     m = P_ELEMENT.search(line)
     if m: return 'element', ELEMENT[(m.group(1) or m.group(2)).lower()]
     m = P_SIZE.search(line)
@@ -196,7 +196,7 @@ def _targets(line):
         m = re.search(r'(?:สกิล|skill)\s*(.+?)\s*(?=\d+(?:\.\d+)?\s*%|ลง\s*\d|เพิ่ม|ลด|$)', line, re.I)
         names = re.split(r',|และ|หรือ|/', m.group(1)) if m else []
         for n in names:
-            n = re.sub(r'\[|\]|Lv\.?\s*\d+', '', n).strip(' .')
+            n = re.sub(r'\[|\]|Lv\.?\s*\d+', '', n).strip(' .-')
             if re.match(r'^[A-Z][A-Za-z\'\-\. ]+$', n): out.append(('skill', n))
         if out: return out
     m = re.search(r'(?:Damage|ดาเมจ|ความรุนแรง|ความเสียหาย|พลังโจมตี)\s*(?:ของ|ให้กับ|ของสกิล)?\s*\[?([A-Z][A-Za-z\']+(?:\s+[A-Za-z\']+)*(?:\s*,\s*[A-Z][A-Za-z\']+(?:\s+[A-Za-z\']+)*)*)\]?\s*(?:ขึ้น|เพิ่มขึ้น|เพิ่มเติม|อีก)?\s*\+?\s*\d', line)
@@ -243,7 +243,7 @@ def parse_line(line):
     A line made of several "…N%" clauses ("เพิ่ม Damage ที่ได้รับจากธาตุ Holy 10%, เพิ่ม Damage ที่ได้รับจากเผ่า Angel 15%")
     is parsed clause by clause so each keeps its own number; otherwise the whole line is parsed at once."""
     if P_SKIP_EFFECT.search(line) or P_NOISE.search(line): return {}
-    groups = [g for g in re.split(r'(?<=[\d%)])\s*,(?![^()]*\))|(?<=%)\s*(?:และ\s*|\s+)(?=(?:เพิ่ม|ลด)(?!เติม|ขึ้น|อีก|ลง))', line) if g.strip()]
+    groups = [g for g in re.split(r'(?:(?<=[\d%)])|(?<=วินาที))\s*,(?![^()]*\))|(?<=%)\s*(?:และ\s*|\s+)(?=(?:เพิ่ม|ลด)(?!เติม|ขึ้น|อีก|ลง))', line) if g.strip()]
     if len(groups) >= 2 and sum('%' in g for g in groups) >= 2:
         out = {}
         for g in groups:
@@ -300,11 +300,21 @@ def _parse_clause(line):
         _add(out, key, val); consumed.append(m.span())
 
     # --- cast / delay --------------------------------------------------------
-    kind, name = _target(text) if re.search(r'ของสกิล|ให้กับสกิล|สกิล\s*\[|ของ\s*Skill', text, re.I) else (None, None)
+    is_cd = re.search(r'Cooldown|คูลดาวน์', text, re.I) and not re.search(r'Global\s*Cooldown', text, re.I)
+    kind, name = _target(text) if re.search(r'ของสกิล|ให้กับสกิล|สกิล\s*\[|ของ\s*Skill', text, re.I) or is_cd else (None, None)
+    if kind != 'skill' and is_cd:
+        # "ลดเวลาคูลดาวน์ Axe Boomerang 2 วินาที", "Severe Rainstorm คูลดาวน์ลดลง 2 วินาที" — name without the word สกิล
+        m_n = re.search(r'(?:Cooldown|คูลดาวน์)(?:\s*time)?\s*(?:ของ|สำหรับ)?\s*\[?([A-Z][A-Za-z\' ]+?)\]?\s*(?:ลง|-|\d)', text) or re.search(r'\[?([A-Z][A-Za-z\' ]+?)\]?\s*คูลดาวน์', text)
+        if m_n: kind, name = 'skill', re.sub(r'^(?:Skill|สกิล)\s+', '', m_n.group(1).strip())
     if kind == 'skill':
         skills = [n2 for k2, n2 in _targets(text) if k2 == 'skill'] or [name]
-        m_f = P_FCT_SKILL.search(text) or P_FCT_DOWN.search(text)
-        if m_f:
+        m_cd = re.search(r'(?:Cooldown|คูลดาวน์).*?(\d+(?:\.\d+)?)\s*(วินาที|%)', text, re.I) if is_cd else None
+        m_f = None if m_cd else (P_FCT_SKILL.search(text) or P_FCT_DOWN.search(text))
+        if m_cd:
+            # skill cooldown (not the global one): seconds or percent, stored positive = reduction
+            sign = -1 if re.search(r'เพิ่ม\s*Cooldown', text, re.I) else 1
+            for n2 in skills: _add(out, f"{'skillCooldownPercent' if m_cd.group(2) == '%' else 'skillCooldown'}:{n2}", sign * float(m_cd.group(1)))
+        elif m_f:
             # "ลด Fixed Cast Time ของสกิล X 0.5 วินาที" → seconds; "... 40%" → percent; one entry per listed skill
             for n2 in skills: _add(out, f"{'skillFct' if m_f.group(2) == '%' else 'skillFctSeconds'}:{n2}", float(m_f.group(1)))
         else:

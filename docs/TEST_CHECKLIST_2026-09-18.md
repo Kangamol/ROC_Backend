@@ -36,6 +36,7 @@ cd ../web && bun install && bun run dev
 | 1.10 | Fenrir Card (Fixed 70%) + อีกชิ้นที่มี Fixed % | Fixed Cast % ใช้ค่า**สูงสุด**ตัวเดียว ไม่บวกกัน (วินาทีบวกกันได้) |
 | 1.11 | Costume Upper ใส่ **Champion Stone (Upper)** | ไม่รวมในผลรวม แต่โชว์ในกล่อง "โบนัสตามเลเวลสกิล — ยังไม่รวมในผลรวม": `[ทุก ๆ 1 Lv ของ Iron Hand] +2 ATK` |
 | 1.13 | ใส่ **Drake Card** (#4137) ในอาวุธ | Equipment Status กลุ่ม Combat แสดง `✓ ยกเลิกโทษขนาดอาวุธ (ตีทุกขนาด 100%)` — เป็นธงแสดงผล ยังไม่ถูกใช้คำนวณดาเมจ (โปรแกรมยังไม่มีเป้าหมาย) · Madogum +9 / Piamette Hood +12 / Queen Anz Revenge ให้ธงเดียวกัน · Purified Knight's Shield แถว 3 มีตัวเลือก "Negates size penalty" |
+| 1.14 | **Aquarius Staff [2]** (#550198) +7 | "Global Cooldown ลดลง 10%" นับเป็น **ลด Delay หลังใช้สกิล 10%** (Global Cooldown = ดีเลย์ทุกสกิล) · ส่วน "ลด Cooldown สกิล X N วินาที" (เช่น Howard's Memory: Hammerfall 1 วินาที) แสดงแยกในกลุ่ม Skill เป็น "ลด Cooldown สกิล X" ไม่รวมกับ Delay |
 | 1.12 | ดูสี | ค่าบวก = เขียว, ค่าลบ = แดง ทั้ง Equipment Status, แถว Cast/Delay ใน Stats, และตัวเลขโบนัสข้างสเตตัส |
 
 ## 2. Enchant NPC
