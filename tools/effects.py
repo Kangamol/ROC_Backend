@@ -51,7 +51,7 @@ RACE = {
     'ปลา': 'fish', 'fish': 'fish', 'สัตว์น้ำ': 'fish', 'ปีศาจ': 'demon', 'demon': 'demon',
     'อันเดด': 'undead', 'undead': 'undead', 'มังกร': 'dragon', 'dragon': 'dragon',
     'เทพ': 'angel', 'เทวดา': 'angel', 'angel': 'angel', 'ไร้รูปร่าง': 'formless', 'ไร้รูป': 'formless', 'formless': 'formless',
-    'player': 'player', 'ผู้เล่น': 'player', 'boss': 'boss', 'บอส': 'boss', 'ทุกเผ่า': 'all', 'ศัตรูทั่วไป': 'normal', 'มอนสเตอร์ธรรมดา': 'normal', 'monster ธรรมดา': 'normal', 'มอนสเตอร์ทั่วไป': 'normal', 'ศัตรูทั้งหมด': 'all', 'ศัตรูทุกชนิด': 'all',
+    'player': 'player', 'ผู้เล่น': 'player', 'veggie': 'plant', 'boss': 'boss', 'บอส': 'boss', 'ทุกเผ่า': 'all', 'ศัตรูทั่วไป': 'normal', 'มอนสเตอร์ธรรมดา': 'normal', 'monster ธรรมดา': 'normal', 'มอนสเตอร์ทั่วไป': 'normal', 'ศัตรูทั้งหมด': 'all', 'ศัตรูทุกชนิด': 'all',
 }
 ELEMENT = {
     'neutral': 'neutral', 'ไร้ธาตุ': 'neutral', 'water': 'water', 'น้ำ': 'water', 'earth': 'earth', 'ดิน': 'earth',
@@ -129,9 +129,10 @@ def _add(out, key, val):
 
 def _kind(line):
     """physical / magic / both for damage-type lines."""
-    magic = re.search(r'เวทมนตร์|เวทย์|magic', line, re.I)
+    # "Mdef+8" / "DEF + 5" in another clause of the line is a plain stat, not a damage-type hint
+    magic = re.search(r'เวทมนตร์|เวทย์|เวท(?![A-Za-z])|MDEF(?!\s*[+\-]\s*\d)|magic', line, re.I)
     # "โจมตี" alone is generic; only count it as physical when no magic wording is present
-    phys = re.search(r'กายภาพ|physical', line, re.I) or (not magic and re.search(r'โจมตี', line))
+    phys = re.search(r'กายภาพ|ภายภาพ|physical|(?<![A-Za-z])DEF(?![A-Za-z])(?!\s*[+\-]\s*\d)', line, re.I) or (not magic and re.search(r'โจมตี', line))
     if magic and phys: return 'both'
     if magic: return 'magic'
     return 'phys'
@@ -283,7 +284,11 @@ def parse_line(line):
             _add(out, f'exp:{kind}:{tgt}' if kind == 'race' and tgt != 'all' else 'expPercent', pct)
 
     # --- damage / resist / ignore def (targeted) -----------------------------
-    if pct is not None and not out.get('variableCastPercent') and not out.get('afterCastDelayPercent') and not re.search(r'EXP|ค่าประสบการณ์', text, re.I):
+    # a cast / delay clause on the same line is blanked out so its % is not read as damage
+    if out.get('variableCastPercent') or out.get('afterCastDelayPercent'):
+        text = re.sub(r'[^,;]*(?:' + _VCT + r'|' + _ACD + r')[^,;]*\d+(?:\.\d+)?\s*%', ' ', text, flags=re.I)
+        pct = _pct(text)
+    if pct is not None and not re.search(r'EXP|ค่าประสบการณ์', text, re.I):
         targets = _targets(text)
         kind, tgt = targets[0] if targets else (None, None)
         dk = _kind(text)
@@ -315,13 +320,14 @@ def parse_line(line):
             elif re.search(r'เวทมนตร์|magic', text, re.I): _add(out, 'matkPercent', pct)
 
     # --- "โจมตีโดยไม่สนใจค่า MDEF ของศัตรู" — full ignore, no number in the text ---
-    if pct is None and not out:
-        m = re.search(r'(?:ไม่สนใจ|เพิกเฉยต่อ|ทะลุ)\s*(?:ค่า)?\s*(?:พลังป้องกันทาง)?\s*(MDEF|DEF|เวทมนตร์|กายภาพ)', text, re.I)
-        if m and not re.search(r'\d', text):
+    if pct is None and not any(k.startswith('ignore') for k in out):
+        m = re.search(r'(?:ไม่สนใจ|เพิกเฉย(?:ต่อ)?|ทะลุ(?:ทะลวง)?)\s*(?:ค่า)?\s*(?:พลังป้องกัน|DEF|MDEF)', text, re.I)
+        if m and '%' not in text:
             k2, t2 = _target(text)
             if not k2: k2, t2 = 'race', 'all'
-            kind = 'ignoreMdef' if m.group(1).upper() in ('MDEF', 'เวทมนตร์') else 'ignoreDef'
-            _add(out, f'{kind}:{k2}:{t2}', 100)
+            dk = _kind(text)
+            if dk in ('phys', 'both'): _add(out, f'ignoreDef:{k2}:{t2}', 100)
+            if dk in ('magic', 'both'): _add(out, f'ignoreMdef:{k2}:{t2}', 100)
 
     # --- granted skill "สามารถใช้ [X] Lv.N ได้" -------------------------------
     m = re.search(r'สามารถใช้\s*(?:สกิล)?\s*\[?([A-Z][A-Za-z\'\-\. ]+?)\]?\s*Lv\.?\s*(\d+)', text)
