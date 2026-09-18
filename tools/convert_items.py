@@ -113,6 +113,10 @@ P_STONE_DESC = re.compile(r'(?:costume\s*(?:ส่วน|ประเภท)?\s*
                           r'|slot\s*ของ\s*(upper|middle|lower|garment))', re.I)
 P_STONE_TEXT = re.compile(r'slot|สล็อต|enchant|ติดตั้ง|costume|คอสตูม', re.I)
 
+# Zodiac hat enchants (NPC <Zodiac> Baryo Girl): slot-4 options Mettle / Magic Essence / Acute / Master Archer /
+# Adamantine / Affection Lv.1–10 (29061–29120) and the per-sign Gem that goes into slot 3.
+ZODIAC_ENCHANTS = set(range(29061, 29121)) | {314879, 300753, 300786, 315108, 315170, 315314, 315391, 315643, 315719}
+
 def is_stone_card_form(item_id):
     return 29000 <= item_id < 30000 or 310000 <= item_id < 320000
 
@@ -143,7 +147,8 @@ def classify(item_id, typ, head_locs, card_loc, is_costume=False, def_=None, nam
     `is_costume` is the client's own costume flag (iteminfo `costume = true`); it is
     reliable for garment costumes whose description says "ประเภท : Garment"."""
     t = norm_type(typ)
-    if 4700 <= item_id < 5000: return 'CARD', 'ENCHANT', []   # NPC enchant options (STR+1, Fighting Spirit …) — never a real card
+    if 4700 <= item_id < 5000 or item_id in ZODIAC_ENCHANTS:
+        return 'CARD', 'ENCHANT', []   # NPC enchant options (STR+1, Fighting Spirit, Mettle Lv.N, Zodiac Gems …) — never a real card
     if t in ('card', 'การ์ด') or card_loc and 4000 <= item_id < 5000:
         return 'CARD', 'CARD', []
     if is_costume and t in ('garment', 'headgear', '') and (name.lower().startswith('costume') or not def_):
@@ -204,7 +209,7 @@ def main():
         typ = (mt.group(1) or mt.group(2)).strip() if mt else None
         head_locs = find_head_loc(text)
         card_loc = parse_card_loc(grab(text, P_CLOC))
-        if card_loc is None and ((typ or '').strip().lower() in ('card', 'การ์ด') or 4000 <= item_id < 5000):
+        if card_loc is None and ((typ or '').strip().lower() in ('card', 'การ์ด') or 4000 <= item_id < 5000 or item_id in ZODIAC_ENCHANTS):
             # cards use many label spellings ("ประเภท : Accessory", "อาชีพ : Footwear", "ส่วนที่ใส่ : Armor"):
             # take the first "label : value" whose value is an equip position
             for m in re.finditer(r'[^\n:]{1,24}\s*:\s*([^\n:]{2,40})', text):
@@ -212,7 +217,7 @@ def main():
                 if loc and m.group(1).strip().lower() not in ('card', 'การ์ด'):
                     card_loc = loc
                     break
-            if card_loc is None and 4700 <= item_id < 5000:
+            if card_loc is None and (4700 <= item_id < 5000 or item_id in ZODIAC_ENCHANTS):
                 card_loc = 'ANY'  # enchant "cards" (STR+1 ...) go into any free slot
             if card_loc is None:
                 card_loc = CARD_LOC_FALLBACK.get(str(item_id))  # rAthena (drop cards match the official DB)

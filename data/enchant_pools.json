@@ -495,154 +495,1751 @@
    ]
   },
   "5744": {
-   "name": "Capricorn Crown",
+   "name": "Zodiac Hat Enchant (Capricorn)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      314879
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "401198": {
-   "name": "Capricorn Crown",
+   "name": "Zodiac Hat Enchant (Capricorn)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      314879
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "5512": {
-   "name": "Aquarius Diadem",
+   "name": "Zodiac Hat Enchant (Aquarius)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      300753
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "401244": {
-   "name": "Aquarius Diadem",
+   "name": "Zodiac Hat Enchant (Aquarius)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      300753
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "5514": {
-   "name": "Pisces Diadem",
+   "name": "Zodiac Hat Enchant (Pisces)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      300786
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "401288": {
-   "name": "Pisces Diadem",
+   "name": "Zodiac Hat Enchant (Pisces)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      300786
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "5545": {
-   "name": "Aries Diadem",
+   "name": "Zodiac Hat Enchant (Aries)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      315108
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   },
   "5549": {
-   "name": "Taurus Diadem",
+   "name": "Zodiac Hat Enchant (Taurus)",
    "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
-   "verified": false,
-   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
    "slots": [
     {
      "position": 4,
      "minRefine": 0,
-     "options": null
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
     },
     {
      "position": 3,
      "minRefine": 0,
-     "options": null,
-     "requiresPrevious": true
+     "options": [
+      315170
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5745": {
+   "name": "Zodiac Hat Enchant (Capricorn)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      314879
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "400324": {
+   "name": "Zodiac Hat Enchant (Capricorn)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      314879
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401199": {
+   "name": "Zodiac Hat Enchant (Capricorn)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      314879
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5513": {
+   "name": "Zodiac Hat Enchant (Aquarius)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      300753
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401245": {
+   "name": "Zodiac Hat Enchant (Aquarius)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      300753
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5515": {
+   "name": "Zodiac Hat Enchant (Pisces)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      300786
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401289": {
+   "name": "Zodiac Hat Enchant (Pisces)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      300786
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5546": {
+   "name": "Zodiac Hat Enchant (Aries)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315108
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401321": {
+   "name": "Zodiac Hat Enchant (Aries)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315108
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401322": {
+   "name": "Zodiac Hat Enchant (Aries)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315108
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5550": {
+   "name": "Zodiac Hat Enchant (Taurus)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315170
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5569": {
+   "name": "Zodiac Hat Enchant (Gemini)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315391
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5570": {
+   "name": "Zodiac Hat Enchant (Gemini)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315391
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401468": {
+   "name": "Zodiac Hat Enchant (Gemini)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315391
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401469": {
+   "name": "Zodiac Hat Enchant (Gemini)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315391
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5581": {
+   "name": "Zodiac Hat Enchant (Cancer)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315314
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5582": {
+   "name": "Zodiac Hat Enchant (Cancer)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315314
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5588": {
+   "name": "Zodiac Hat Enchant (Leo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315643
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5589": {
+   "name": "Zodiac Hat Enchant (Leo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315643
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401489": {
+   "name": "Zodiac Hat Enchant (Leo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315643
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401490": {
+   "name": "Zodiac Hat Enchant (Leo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315643
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5598": {
+   "name": "Zodiac Hat Enchant (Virgo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315719
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "5599": {
+   "name": "Zodiac Hat Enchant (Virgo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315719
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401537": {
+   "name": "Zodiac Hat Enchant (Virgo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315719
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
+    }
+   ]
+  },
+  "401538": {
+   "name": "Zodiac Hat Enchant (Virgo)",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": true,
+   "note": "slot 4: Mettle / Affection / Magic Essence / Adamantine / Acute / Master Archer Lv.1–4; slot 3: the sign's Gem, only after slot 4 reached Lv.4 (50 Silvervine + 20M, 50%). ไม่สามารถ Reset ได้",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      29061,
+      29062,
+      29063,
+      29064,
+      29071,
+      29072,
+      29073,
+      29074,
+      29081,
+      29082,
+      29083,
+      29084,
+      29091,
+      29092,
+      29093,
+      29094,
+      29101,
+      29102,
+      29103,
+      29104,
+      29111,
+      29112,
+      29113,
+      29114
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": [
+      315719
+     ],
+     "requiresPreviousIn": [
+      29064,
+      29074,
+      29084,
+      29094,
+      29104,
+      29114
+     ]
     }
    ]
   }

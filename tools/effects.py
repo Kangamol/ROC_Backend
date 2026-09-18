@@ -9,6 +9,7 @@ Output of parse_effects(lines):
                 statMin:   [{stat, min, refine?, bonuses}], applies once base stat >= min (and refine >= refine)
                 level:     [{min?, max?, bonuses}],        applies while min <= base level <= max
                 perLevel:  [{every, min?, max?, bonuses}], bonuses * floor(min(baseLv, max) / every), once baseLv >= min
+                perJobLevel:[{every, bonuses}],            bonuses * floor(jobLv / every)
                 skillLevel:[{skill, every?, min?, bonuses}],  scales with / needs a learned skill level — shown, NOT summed
                 set:       [{requires: [names], bonuses}]}  all named items / cards must be worn
     "Base STR" / "Base Lv" always mean the character's own base value (what the player
@@ -31,7 +32,7 @@ STAT_ALIASES = {
     'atk': 'atk', 'พลังโจมตี': 'atk', 'matk': 'matk', 'def': 'def', 'mdef': 'mdef', 'hit': 'hit', 'flee': 'flee',
     'crit': 'crit', 'cri': 'crit', 'critical': 'crit', 'critical rate': 'crit', 'perfect dodge': 'perfectDodge',
     'critical damage': 'critDamagePercent', 'cri damage': 'critDamagePercent', 'crit damage': 'critDamagePercent',
-    'aspd': 'aspd', 'attack speed': 'aspd', 'maxhp': 'maxHp', 'max hp': 'maxHp', 'mhp': 'maxHp', 'maxsp': 'maxSp', 'max sp': 'maxSp', 'msp': 'maxSp',
+    'aspd': 'aspd', 'attack speed': 'aspd', 'ความเร็วในการโจมตี': 'aspd', 'ความเร็วโจมตี': 'aspd', 'maxhp': 'maxHp', 'max hp': 'maxHp', 'mhp': 'maxHp', 'maxsp': 'maxSp', 'max sp': 'maxSp', 'msp': 'maxSp',
     'mhp/msp': 'maxHpSp', 'maxhp/maxsp': 'maxHpSp', 'hp': 'maxHp', 'sp': 'maxSp',
 }
 _STAT_RE = '|'.join(sorted(map(re.escape, STAT_ALIASES), key=len, reverse=True))
@@ -41,7 +42,7 @@ P_STAT_PRE = re.compile(r'(?<![A-Za-z\d])([+\-])\s*(' + _STAT_RE + r')\s*(\d+(?:
 # "เพิ่ม ASPD 5%", "เพิ่มพลังโจมตีทางกายภาพ 5%", "ASPD เพิ่มขึ้น 5%"
 P_STAT_TH = re.compile(r'เพิ่ม\s*(?:ค่า)?\s*(' + _STAT_RE + r')\s*(?:ขึ้น|อีก|ทีละ|ครั้งละ|เพิ่มเติม|\s)*\+?\s*(\d+(?:\.\d+)?)\s*(%?)', re.I)
 # "ATK เพิ่มขึ้นทีละ +5", "HIT เพิ่ม 5"
-P_STAT_POST = re.compile(r'(?<![A-Za-z])(' + _STAT_RE + r')\s*เพิ่ม(?:ขึ้น|อีก|ทีละ|ครั้งละ|เพิ่มเติม|เท่ากับ|\s)*\+?\s*(\d+(?:\.\d+)?)\s*(%?)', re.I)
+P_STAT_POST = re.compile(r'(?<![A-Za-z])(' + _STAT_RE + r')\s*(?:จะ)?\s*เพิ่ม(?:ขึ้น|อีก|ทีละ|ครั้งละ|เพิ่มเติม|เท่ากับ|\s)*\+?\s*(\d+(?:\.\d+)?)\s*(%?)', re.I)
 P_HPSP_CONTEXT = re.compile(r'ฟื้นฟู|ฟื้น|Recovery|Regen|ใช้\s*SP|SP\s*ที่ใช้|การใช้|สูญเสีย|ดูด|Drain|ปริมาณ', re.I)
 # "ATK, MATK + 1" — a list of stats sharing one value
 P_STAT_LIST = re.compile(r'(?<![A-Za-z])(' + _STAT_RE + r')\s*,\s*(?=(?:(?:' + _STAT_RE + r')\s*,\s*)*(?:' + _STAT_RE + r')\s*[+\-]\s*\d)', re.I)
@@ -75,13 +76,14 @@ _VCT = r'(?:Vari?able\s*Cast(?:ing)?\s*Time|Virable\s*Cast\s*Time|VCT|(?:ระ�
 P_VCT_DOWN = re.compile(r'(?:ลด\s*' + _VCT + r'|' + _VCT + r'\s*ลดลง)\s*(?:ลง|เพิ่มเติม|เพิ่มอีก|อีก|\s)*(\d+(?:\.\d+)?)\s*%', re.I)
 P_VCT_UP = re.compile(r'เพิ่ม\s*' + _VCT + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
 # fixed cast: "Fixed Cast Time", "Fix Casting", "FCT", "ระยะเวลาร่ายแบบคงที่/คงตัว/ตายตัว", "การร่ายแบบคงตัว", "เวลาในการร่ายแบบ Fixed Cast Time"
-_FCT = (r'(?:Fix(?:ed)?\s*Cast(?:ing)?(?:\s*Time)?|FCT'
+_FCT = (r'(?:(?:ระยะ)?(?:เวลา)?(?:ใน)?(?:การ)?ร่าย(?:เวทย์|เวทมนตร์)?\s*(?:แบบ)?\s*(?:Fix(?:ed)?\s*Cast(?:ing)?(?:\s*Time|ime)?|คงที่|คงตัว|ตายตัว)'
+        r'|Fix(?:ed)?\s*Cast(?:ing)?(?:\s*Time|ime)?|FCT'
         r'|(?:ระยะ)?เวลา(?:ใน)?(?:การ)?ร่าย(?:เวทย์|เวทมนตร์)?\s*(?:แบบ)?\s*(?:คงที่|คงตัว|ตายตัว|Fix(?:ed)?\s*Cast(?:ing)?(?:\s*Time)?)'
         r'|(?:ระยะ)?เวลา\s*Fix(?:ed)?\s*Cast(?:ing)?(?:\s*Time)?'
         r'|การร่าย(?:เวทย์)?แบบ(?:คงที่|คงตัว|ตายตัว))')
 # "ลด Fixed Cast Time ของสกิล X 0.5 วินาที", "ลดระยะเวลาร่ายแบบคงที่ของสกิล [A], [B] 50%"
 P_FCT_SKILL = re.compile(r'(?:ลด\s*)?' + _FCT + r'\s*(?:ของ|ให้กับ)?\s*(?:สกิล|Skill)\s*.+?(?:ลง|ลดลง)?\s*(\d+(?:\.\d+)?)\s*(วินาที|%)', re.I)
-P_FCT_DOWN = re.compile(r'(?:ลด\s*' + _FCT + r'|' + _FCT + r'\s*ลดลง)(?:\s*ของ\s*(?:สกิล|Skill))?\s*(?:ลง|ลดลง|เพิ่มเติม|อีก|ทีละ|\s)*-?\s*(\d+(?:\.\d+)?)\s*(วินาที|%)', re.I)
+P_FCT_DOWN = re.compile(r'(?:ลด\s*' + _FCT + r'|' + _FCT + r'\s*ลดลง)(?:\s*ของ\s*(?:สกิล|Skill))?\s*(?:ลง|ลดลง|เพิ่มเติม|อีก|ทีละ|\s)*-?\s*(\d+(?:\.\d+)?)\s*(วินาที|%|(?=\s*(?:,|$)))', re.I)
 _ACD = r'(?:After\s*Cast\s*Delay|ACD|(?:สกิล)?\s*(?:Delay|ดีเลย์)(?:\s*หลัง(?:จาก)?(?:การ)?ใช้สกิล)?)'
 P_ACD_DOWN = re.compile(r'(?:ลด\s*' + _ACD + r'|' + _ACD + r'\s*ลดลง)\s*(?:ลง|เพิ่มเติม|เพิ่มอีก|อีก|\s)*(\d+(?:\.\d+)?)\s*%', re.I)
 P_ACD_UP = re.compile(r'เพิ่ม\s*' + _ACD + r'\s*(?:ขึ้น)?\s*(\d+(?:\.\d+)?)\s*%', re.I)
@@ -92,7 +94,7 @@ P_VCT_PER_REFINE = re.compile(r'ลด\s*' + _VCT + r'.*(?:คิดเป็น
 # conditions ------------------------------------------------------------------
 P_COND_MIN = re.compile(r'(?:(?:หาก|เมื่อ)?\s*(?:Item\s*)?อั[พป]เกรดตั้งแต่ระดับ\s*\+?|ตั้งแต่ขั้นอั[พป]เกรดมากกว่า|ทุก\s*ๆ?\s*การอั[พป]เกรดที่มากกว่าระดับ\s*\+?|เมื่ออั[พป]เกรด(?:ถึง)?(?:ขั้น|ตั้งแต่)?|อั[พป]เกรดตั้งแต่(?:ขั้น)?|เมื่อขั้นอั[พป]เกรด(?:ตั้งแต่)?|เมื่อ(?:ตีบวก)?(?:ตั้งแต่)?\s*\+|ที่ระดับ\s*\+|ถ้า\S*ตีบวกตั้งแต่\s*\+?|ตีบวก(?:ถึง|ตั้งแต่)\s*\+?)\s*\+?\s*(\d+)')
 TH_NUM = {'หนึ่ง': 1, 'สอง': 2, 'สาม': 3, 'สี่': 4, 'ห้า': 5, 'หก': 6, 'เจ็ด': 7, 'แปด': 8, 'เก้า': 9, 'สิบ': 10}
-P_COND_EACH = re.compile(r'ทุก\s*ๆ?\s*(?:การ)?(?:อั[พป]เกรด|ตีบวก)\s*(\d+)\s*ขั้น|ทุก\s*ๆ?\s*(หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ)\s*(?:การ)?(?:อั[พป]เกรด|ตีบวก)|ต่อ(?:ระดับ|ขั้น)?(?:การ)?(?:อั[พป]เกรด|ตีบวก)(?:\s*(?:ทุก\s*ๆ?)?\s*(\d+)\s*(?:Lv\.?|ขั้น|ระดับ)?)?')
+P_COND_EACH = re.compile(r'ทุก\s*ๆ?\s*(?:การ)?(?:อั[พป]เกรด|ตีบวก)\s*(?:Headgear|หมวก)?\s*(\d+)\s*ขั้น|ทุก\s*ๆ?\s*(?:การ)?อั[พป]เกรด\s*(?:Headgear|หมวก)(?!\s*\d)|(?:เมื่อ)?อั[พป]เกรด(?:หมวก|Headgear)\s*ทุก\s*ๆ?\s*(\d+)\s*ขั้น|ทุก\s*ๆ?\s*(หนึ่ง|สอง|สาม|สี่|ห้า|หก|เจ็ด|แปด|เก้า|สิบ)\s*(?:การ)?(?:อั[พป]เกรด|ตีบวก)|ต่อ(?:ระดับ|ขั้น)?(?:การ)?(?:อั[พป]เกรด|ตีบวก)(?:\s*(?:ทุก\s*ๆ?)?\s*(\d+)\s*(?:Lv\.?|ขั้น|ระดับ)?)?')
 P_COND_STAT = re.compile(r'ทุก\s*ๆ?\s*(?:Base\s*)?(\d+)?\s*(?:Base\s*)?(STR|AGI|VIT|INT|DEX|LUK)\s*(\d+)?', re.I)
 P_STAT_CAP = re.compile(r'Base\s*(STR|AGI|VIT|INT|DEX|LUK)\s*สูงสุด.*?(\d+)', re.I)
 # "เมื่อ Base STR ตั้งแต่ 90 ขึ้นไป", "หาก Base AGI ตั้งแต่108 ขึ้นไป", "เมื่อ Base VIT 99 ขึ้นไป", "เมื่อ Base INT 90,"
@@ -104,6 +106,9 @@ P_PER_LEVEL_A = re.compile(r'ทุก\s*ๆ?\s*(?:การเพิ่ม(?:�
 P_PER_LEVEL_B = re.compile(r'ทุก\s*ๆ?\s*(?:ครั้งที่|การเพิ่มขึ้นของ)?\s*' + _BLV + r'\s*(?:เพิ่มขึ้น)?\s*(\d+)\s*(?:ขั้น|เลเวล|Lv\.?)?', re.I)
 # "... 1% ต่อ BaseLevel ตัวละคร"
 P_PER_LEVEL_C = re.compile(r'ต่อ\s*' + _BLV + r'(?:\s*ตัวละคร)?', re.I)
+_JLV = r'(?:Base\s*)?(?:Job\s*(?:Level|Lv\.?)|JobLevel|JobLv\.?|เลเวลอาชีพ|Job\s*เลเวล)'
+# "ทุก ๆ 2 Job Level", "ต่อ Base JobLevel ตัวละคร"
+P_PER_JOBLEVEL = re.compile(r'ทุก\s*ๆ?\s*(\d+)\s*' + _JLV + r'|ทุก\s*ๆ?\s*' + _JLV + r'\s*(\d+)|ต่อ\s*' + _JLV + r'(?:\s*ตัวละคร)?', re.I)
 # "(ปริมาณการเพิ่มขึ้นจะสูงสุดจนถึง Base Lv. 90)", "(สูงสุดจนถึง Base Lv.200)", "(Max.Lv 99)"
 P_LEVEL_CAP = re.compile(r'สูงสุด.*?' + _BLV + r'\s*(\d+)|Max\.?\s*Lv\.?\s*(\d+)', re.I)
 # "หาก Base Lv.80 ขึ้นไป", "เมื่อตัวละครเลเวลมากกว่า 20 :", "หากตัวละครมี Lv. ตั้งแต่ 70 ขึ้นไป :", "เมื่อ Base Lv.88"
@@ -135,7 +140,7 @@ P_SET_TRIGGER = re.compile(r'\[Set\]|ร่วมกัน|ด้วยกัน
 # lines that carry no stat effect (so they are not reported as unparsed)
 P_NOISE = re.compile(r'แลกเปลี่ยน|ไอเทมเช่า|Item เช่า|ระยะเวลาเช่า|ไม่สามารถ|ไม่มีวัน|ไม่เสียหาย|Ban Guild|WoE|PvP|PVP|Raid|Enchant Stone Box|Stone Box|<NAVI>|^[_―\-\s]*$|หมายเหตุ|ระวัง|Sillit|คลังเก็บ|ดูกลมกลืน|\*\*\*|Zodiac|มีโอกาส|โอกาส|สุ่ม|Autospell|Auto Spell|เมื่อฆ่า|เมื่อกำจัด|เมื่อสังหาร|ทุกครั้งที่|ทุก\s*ๆ?\s*\d+\s*วินาที|ทุก\s*\d+\s*วินาที|ถอด|เท่ากับ\s*(?:\d+\s*เท่าของ\s*)?Base|ขึ้นอยู่กับ\s*Base|ตาม\s*Base|ระดับ Refine\*', re.I)
 P_SKIP_EFFECT = re.compile(r'Global Cooldown|หลังโจมตี|ผลรวม|ค่าตีบวกของทั้งเซ็ต|ของเซ็ต|ของเซต|อั[พป]เกรดรวมกัน|เมื่อช่อง\s*Enchant'
-                           r'|อั[พป]เกรดของ\s+[A-Z]|การอั[พป]เกรด\s+[A-Z][A-Za-z\' \[\]]+\d+\s*ขั้น'   # another item's refine level
+                           r'|อั[พป]เกรดของ\s+[A-Z]|การอั[พป]เกรด\s+(?!Headgear)[A-Z][A-Za-z\' \[\]]+\d+\s*ขั้น'   # another item's refine level (the host "Headgear" is fine)
                            r'|(?:เป็นเวลา|ในระยะเวลา)\s*\d+\s*วินาที', re.I)                                  # timed buff
 
 
@@ -185,6 +190,12 @@ def _targets(line):
             n = re.sub(r'\[|\]|Lv\.?\s*\d+', '', n).strip(' .')
             if re.match(r'^[A-Z][A-Za-z\'\-\. ]+$', n): out.append(('skill', n))
         if out: return out
+    m = re.search(r'(?:Damage|ดาเมจ|ความรุนแรง|ความเสียหาย|พลังโจมตี)\s*(?:ของ|ให้กับ|ของสกิล)?\s*\[?([A-Z][A-Za-z\']+(?:\s+[A-Za-z\']+)*(?:\s*,\s*[A-Z][A-Za-z\']+(?:\s+[A-Za-z\']+)*)*)\]?\s*(?:ขึ้น|เพิ่มขึ้น|เพิ่มเติม|อีก)?\s*\+?\s*\d', line)
+    if m and not re.search(r'ทางกายภาพ|ทางเวท|ระยะไกล|ระยะประชิด', line[:m.start()]):
+        names = [re.sub(r'^Skill\s+', '', n.strip()) for n in m.group(1).split(',')]
+        vocab = {k.lower() for k in list(RACE) + list(ELEMENT) + list(SIZE)} | {'damage', 'boss', 'mvp', 'critical', 'player', 'race', 'monster'}
+        if all(n.lower() not in vocab and n.split()[0].lower() not in vocab for n in names):
+            return [('skill', n) for n in names]
     rest = line
     for m in P_ELEMENT.finditer(line):
         out.append(('element', ELEMENT[m.group(1).lower()]))
@@ -296,7 +307,8 @@ def _parse_clause(line):
     else:
         rest = text
         for m in P_FCT_DOWN.finditer(text):
-            _add(out, 'fixedCastPercent' if m.group(2) == '%' else 'fixedCastSeconds', float(m.group(1)))
+            unit = m.group(2) or ('วินาที' if '.' in m.group(1) or float(m.group(1)) < 3 else '%')
+            _add(out, 'fixedCastPercent' if unit == '%' else 'fixedCastSeconds', float(m.group(1)))
             rest = rest.replace(m.group(0), ' ')
         for m in P_VCT_DOWN.finditer(rest): _add(out, 'variableCastPercent', float(m.group(1)))
         for m in P_VCT_UP.finditer(rest): _add(out, 'variableCastPercent', -float(m.group(1)))
@@ -338,7 +350,7 @@ def _parse_clause(line):
         is_ignore = re.search(r'เพิกเฉย|เผิกเฉย|ไม่สนใจ|ลดค่าพลังป้องกัน|ลดพลังป้องกัน|ทะลุ(?:ทะลวง)?พลังป้องกัน|Ignore', text, re.I)
         # "เพิ่ม Damage ที่ได้รับจาก…" = takes MORE damage → negative resistance
         if re.search(r'เพิ่ม\s*(?:Damage|ดาเมจ|ความเสียหาย)\s*ที่ได้รับ', text) and not re.search(r'ลด', text): pct = -abs(pct)
-        is_dmg = re.search(r'เพิ่ม.*(?:Damage|ดาเมจ|ความเสียหาย|ความแรง|ความรุนแรง|พลังโจมตี)|โจมตี.*แรงขึ้น|(?:Damage|ดาเมจ|ความเสียหาย|พลังโจมตี).*เพิ่มขึ้น|(?:Damage|ความเสียหาย)\s*\+', text, re.I)
+        is_dmg = re.search(r'เพิ่ม.*(?:Damage|ดาเมจ|ความเสียหาย|ความแรง|ความรุนแรง|พลังโจมตี)|โจมตี.*แรงขึ้น|(?:Damage|ดาเมจ|ความเสียหาย|พลังโจมตี).*เพิ่มขึ้น|(?:Damage|ความเสียหาย)\s*\+|^(?:Damage|ดาเมจ|ความเสียหาย).*\+\s*\d+\s*%', text, re.I)
         if is_ignore and re.search(r'ป้องก[ัอ]น|ป้องก่อน|def', text, re.I):
             for k2, t2 in (targets or [('race', 'all')]):
                 if dk in ('phys', 'both'): _add(out, f'ignoreDef:{k2}:{t2}', pct)
@@ -412,12 +424,23 @@ def _set_names(cond_line):
                 return []   # "เมื่อใช้ร่วมกับชุดเกราะ Toughen Time Keeper รู้สึกได้ถึงความบางเบา…" — flavour text, not a set header
             n = re.sub(r'[\u0E00-\u0E7F].*$', '', n).strip(' ,.')        # drop a trailing Thai clause
             if n and re.search(r'[A-Za-z]', n): names.append(n)
-        if names: alts.append(names)
+        if names:
+            base = [re.sub(r'^\[NFS\]\s*', '', n) for n in names]
+            if len(names) > 1 and len(set(base)) < len(names):
+                seen = set()
+                for n, b in zip(names, base):
+                    if b not in seen: seen.add(b); alts.append([n])   # "X [1] และ [NFS] X [1]" → either one
+            else:
+                alts.append(names)
     return alts
 
 
 def _each_n(m):
-    return int(m.group(1)) if m.group(1) else TH_NUM[m.group(2)] if m.group(2) else int(m.group(3) or 1)
+    """Refine step of a P_COND_EACH match: the first number found, a Thai numeral, else 1."""
+    for g in m.groups():
+        if g and g.isdigit(): return int(g)
+        if g in TH_NUM: return TH_NUM[g]
+    return 1
 
 
 def _cond_skill(line):
@@ -438,6 +461,12 @@ def _cond_statmin(line):
     if not m: return None, None
     if not (m.group(3) or m.group(5) or re.match(r'\s*,', line[m.end():])): return None, None
     return ('statmin', (m.group(1) or m.group(2)).lower(), int(m.group(4))), m
+
+
+def _cond_joblevel(line):
+    m = P_PER_JOBLEVEL.search(line)
+    if not m: return None, None
+    return ('perjoblevel', int(m.group(1) or m.group(2) or 1)), m.span()
 
 
 def _cond_level(line):
@@ -537,6 +566,7 @@ def parse_effects(lines):
         m_min = P_COND_MIN.search(line)
         c_statmin, m_statmin = _cond_statmin(line)
         c_skill, skill_span = _cond_skill(line)
+        c_job, job_span = _cond_joblevel(line)
         c_level, level_spans, level_line = _cond_level(line)
         m_eq = P_EQUALS_STAT.search(line)
         if pending_set is not None:
@@ -566,6 +596,9 @@ def parse_effects(lines):
         elif c_skill:
             cond = c_skill
             body = _strip(line, [skill_span])
+        elif c_job:
+            cond = c_job
+            body = _strip(line, [job_span])
         elif m_stat and (m_stat.group(1) or m_stat.group(3)) and not (c_statmin and m_statmin.start() < m_stat.start()):
             every = int(m_stat.group(1) or m_stat.group(3))
             cond = ('stat', m_stat.group(2).lower(), every, None)
@@ -674,7 +707,10 @@ def parse_effects(lines):
                 conditional.append(line)
             continue
 
-        if cond is None and not effects and re.search(r'อั[พป]เกรดรวมกัน', line):
+        if cond is None and re.match(r'^(?:ผล(?:ของ)?)?เอฟเฟกต์\s*\[?[A-Z]', line):
+            active, active_block = ('skip',), True          # what a temporary status does — not a permanent bonus
+            unparsed.append(line)
+        elif cond is None and not effects and re.search(r'อั[พป]เกรดรวมกัน', line):
             active, active_block = ('skip',), True          # "เมื่อขั้นอัพเกรดรวมกันมากกว่า 21 ขั้น" — not computable
             unparsed.append(line)
         elif active_block and active and active[0] == 'skip':
@@ -702,6 +738,7 @@ def parse_effects(lines):
         elif kind == 'statmin': cond.setdefault('statMin', []).append(gated({'stat': key[1], 'min': key[2]}, gate) | {'bonuses': v})
         elif kind == 'level':  cond.setdefault('level', []).append(gated({'min': key[1], 'max': key[2]}, gate) | {'bonuses': v})
         elif kind == 'perlevel': cond.setdefault('perLevel', []).append(gated({'every': key[1], 'min': key[2], 'max': key[3]}, gate) | {'bonuses': v})
+        elif kind == 'perjoblevel': cond.setdefault('perJobLevel', []).append(gated({'every': key[1]}, gate) | {'bonuses': v})
         elif kind == 'skilllv': cond.setdefault('skillLevel', []).append(gated({'skill': key[1], 'every': key[2], 'min': key[3]}, gate) | {'bonuses': v})
         elif kind == 'set':
             for alt in key[1]: cond.setdefault('set', []).append(gated({'requires': list(alt)}, (gate[0], None, gate[2])) | {'bonuses': v})

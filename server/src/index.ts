@@ -68,7 +68,8 @@ const buildBody = t.Object({
 const JOBS_PATH = resolve(import.meta.dir, "../../data/jobs.json");
 const jobs: Record<string, unknown> = (await Bun.file(JOBS_PATH).exists()) ? await Bun.file(JOBS_PATH).json() : {};
 const ENCHANT_PATH = resolve(import.meta.dir, "../../data/enchant_pools.json");
-const enchantPools: Record<string, unknown> = (await Bun.file(ENCHANT_PATH).exists()) ? await Bun.file(ENCHANT_PATH).json() : { default: null, items: {} };
+/** Read on every request (a few KB) so edits to the hand-maintained table show up without restarting the API. */
+const enchantPools = async () => ((await Bun.file(ENCHANT_PATH).exists()) ? Bun.file(ENCHANT_PATH).json() : { default: null, items: {} });
 if (!Object.keys(jobs).length) console.warn(`jobs: ${JOBS_PATH} missing — run tools/build_job_data.py (engine falls back to approximations)`);
 
 const app = new Elysia()
@@ -78,7 +79,7 @@ const app = new Elysia()
   .get("/api/health", () => ({ ok: true }))
   .get("/api/jobs", () => jobs)
   // NPC enchant rules per item (hand-maintained data/enchant_pools.json; the client has no enchant data)
-  .get("/api/enchant-pools", () => enchantPools)
+  .get("/api/enchant-pools", () => enchantPools())
 
   // ---- meta ---------------------------------------------------------------
   .get("/api/meta", async () => {
