@@ -48,6 +48,7 @@ cd ../web && bun install && bun run dev
 | 2.5 | Capricorn Crown +7 + Mettle Lv.4 + Capricorn Gem | ATK +16% HIT +40, DEX +2, ASPD +10%, Damage Meteor Storm **+70%** (10%×7) — ตี +10 → +100% |
 | 2.6 | **Zodiac Mail** (เช่น Capricorn Mail #450545) +8 → +9 | +8 ล็อกทุกช่อง · +9 เปิดช่อง 4 · ใส่ Hit Plus 2 ช่อง 3 ยังล็อก · Hit Plus 5 เปิด · ช่อง 3 SP+100 → ช่อง 2 เปิด (14 Memory) |
 | 2.7 | **Zodiac Manteau** (#480880–480892) +9 | ช่อง 4/3: Expert Archer/Fighting Spirit/Expert Magician/Spell/Attack Delay/LUK สายอัพ · ช่อง 2: Spirit of Knight Lv.1–5 เปิดเมื่อ 4 และ 3 ระดับสูงสุด |
+| 2.7b | Zodiac Manteau +9 ใส่ **Spirit of Knight Lv.5** ในช่อง 2 | Combo ของผ้าคลุมเอง "เมื่อสวมใส่คู่กับ Spirit of Knight Lv.5" ทำงาน: Damage กายภาพ/เวท ทุกเผ่า = 7 (SoK) + **4** (combo) = 11% · ถ้าเป็น Lv.4 ได้แค่ 5% |
 | 2.8 | **Infinity Boots** ทั้ง 6 | ช่อง 4: FS/EA/Spell/Vitality/Attack Speed/Lucky Lv.1–4 · ช่อง 3: Special 6 แบบ เปิดเมื่อช่อง 4 Lv.4 (Special ไม่รวมในผลรวม) |
 | 2.9 | **4th ROC Anniversary Ring** | ช่อง 4/3: STR–LUK +3~+5 · ช่อง 2: Spell/Expert Archer/Fighting Spirit Lv.4–10 ไม่มีลำดับบังคับ |
 | 2.10 | ถุงมือ/แหวนอื่นที่ไม่อยู่ในตาราง | **ไม่มี**ช่อง enchant |

@@ -425,7 +425,9 @@ def _set_names(cond_line):
     for alt in re.split(r'\s*หรือ\s*', raw):
         names = []
         for n in re.split(r',|และ|/', alt):
-            if re.search(r'Lv\.?\s*\d|\d+\s*(?:ชนิด|ประเภท)', n): continue        # "Thief Shadow 2 ชนิด" — a count, not a name
+            # "Thief Shadow 2 ชนิด" is a count, "สกิล X Lv.5" a skill — but "Spirit of Knight Lv.5" / "Mettle Lv. 4" are enchant item names
+            if re.search(r'\d+\s*(?:ชนิด|ประเภท)', n): continue
+            if re.search(r'Lv\.?\s*\d', n) and not re.match(r'^\s*\[?[A-Z][A-Za-z\' ]+?\s+Lv\.?\s*\d+\]?\s*[,.]?\s*$', n): continue
             n = re.sub(r'^[\u0E00-\u0E7F\s]+', '', n)                     # "ชุดเกราะ Toughen Time Keeper" → drop the Thai noun
             n = re.split(r'\s+(?:ที่|ซึ่ง)', n)[0]                       # "Fallen Angel Wing ที่อัพเกรดถึงขั้น 9" → item name only
             m_th = re.search(r'[\u0E00-\u0E7F].*$', n)
