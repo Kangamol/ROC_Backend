@@ -51,7 +51,7 @@ RACE = {
     'ปลา': 'fish', 'fish': 'fish', 'สัตว์น้ำ': 'fish', 'ปีศาจ': 'demon', 'demon': 'demon',
     'อันเดด': 'undead', 'undead': 'undead', 'มังกร': 'dragon', 'dragon': 'dragon',
     'เทพ': 'angel', 'เทวดา': 'angel', 'angel': 'angel', 'ไร้รูปร่าง': 'formless', 'ไร้รูป': 'formless', 'formless': 'formless',
-    'player': 'player', 'ผู้เล่น': 'player', 'boss': 'boss', 'บอส': 'boss', 'ทุกเผ่า': 'all', 'ศัตรูทั่วไป': 'normal', 'ศัตรูทั้งหมด': 'all', 'ศัตรูทุกชนิด': 'all',
+    'player': 'player', 'ผู้เล่น': 'player', 'boss': 'boss', 'บอส': 'boss', 'ทุกเผ่า': 'all', 'ศัตรูทั่วไป': 'normal', 'มอนสเตอร์ธรรมดา': 'normal', 'monster ธรรมดา': 'normal', 'มอนสเตอร์ทั่วไป': 'normal', 'ศัตรูทั้งหมด': 'all', 'ศัตรูทุกชนิด': 'all',
 }
 ELEMENT = {
     'neutral': 'neutral', 'ไร้ธาตุ': 'neutral', 'water': 'water', 'น้ำ': 'water', 'earth': 'earth', 'ดิน': 'earth',
@@ -314,6 +314,15 @@ def parse_line(line):
             elif re.search(r'ทางกายภาพ|physical', text, re.I) and not re.search(r'เวทมนตร์', text): _add(out, 'atkPercent', pct)
             elif re.search(r'เวทมนตร์|magic', text, re.I): _add(out, 'matkPercent', pct)
 
+    # --- "โจมตีโดยไม่สนใจค่า MDEF ของศัตรู" — full ignore, no number in the text ---
+    if pct is None and not out:
+        m = re.search(r'(?:ไม่สนใจ|เพิกเฉยต่อ|ทะลุ)\s*(?:ค่า)?\s*(?:พลังป้องกันทาง)?\s*(MDEF|DEF|เวทมนตร์|กายภาพ)', text, re.I)
+        if m and not re.search(r'\d', text):
+            k2, t2 = _target(text)
+            if not k2: k2, t2 = 'race', 'all'
+            kind = 'ignoreMdef' if m.group(1).upper() in ('MDEF', 'เวทมนตร์') else 'ignoreDef'
+            _add(out, f'{kind}:{k2}:{t2}', 100)
+
     # --- granted skill "สามารถใช้ [X] Lv.N ได้" -------------------------------
     m = re.search(r'สามารถใช้\s*(?:สกิล)?\s*\[?([A-Z][A-Za-z\'\-\. ]+?)\]?\s*Lv\.?\s*(\d+)', text)
     if m: out[f'skill:{m.group(1).strip()}'] = int(m.group(2))
@@ -570,6 +579,20 @@ def parse_effects(lines):
         elif kind == 'level':  cond.setdefault('level', []).append(gated({'min': key[1], 'max': key[2]}, gate) | {'bonuses': v})
         elif kind == 'perlevel': cond.setdefault('perLevel', []).append(gated({'every': key[1], 'min': key[2], 'max': key[3]}, gate) | {'bonuses': v})
         elif kind == 'set':    cond.setdefault('set', []).append(gated({'requires': list(key[1])}, (gate[0], None)) | {'bonuses': v})
-    if 'refine' in cond: cond['refine'].sort(key=lambda e: e['min'])
+    if 'refine' in cond:
+        cond['refine'].sort(key=lambda e: e['min'])
+        # Sealed-card style penalties: "เพิ่มระยะเวลาร่าย 150%" then "เมื่ออัพเกรด +15 เพิ่มระยะเวลาร่าย 120%" — the refine line
+        # *replaces* the penalty with a milder one; store the difference so the sum comes out at -120, not -270.
+        for e in cond['refine']:
+            if e.get('requires'): continue
+            replaced = False
+            for k, v in list(e['bonuses'].items()):
+                base = plain.get(k, 0)
+                if base < 0 and v < 0 and abs(v) < abs(base): e['bonuses'][k] = _num(v - base); replaced = True
+            if replaced:
+                # the same block restates the unchanged bonuses too ("MHP -50%, MSP +50%") — they are not added again
+                for k, v in list(e['bonuses'].items()):
+                    if plain.get(k) == v: del e['bonuses'][k]
+        cond['refine'] = [e for e in cond['refine'] if e['bonuses']]
     if 'perRefine' in cond: cond['perRefine'].sort(key=lambda e: e['every'])
     return plain, cond, unparsed, parsed, conditional
