@@ -1,0 +1,650 @@
+{
+ "_doc": "NPC enchant rules per item. position = card slot the enchant occupies (4 = last, then 3, 2). options = allowed enchant item IDs (null = any enchant). Items not listed fall back to `default`. Maintained by hand from Gnjoy pages / in-game screenshots — the client has no enchant data.",
+ "default": {
+  "name": "Hidden Enchant (STR/AGI/VIT/INT/DEX/LUK +1~+3)",
+  "slots": [
+   {
+    "position": 4,
+    "minRefine": 0,
+    "options": [
+     4700,
+     4701,
+     4702,
+     4710,
+     4711,
+     4712,
+     4720,
+     4721,
+     4722,
+     4730,
+     4731,
+     4732,
+     4740,
+     4741,
+     4742,
+     4750,
+     4751,
+     4752
+    ]
+   }
+  ]
+ },
+ "items": {
+  "2589": {
+   "name": "Fallen Angel Wing",
+   "source": "https://roc.gnjoy.in.th/promotion/how-to-enchant-fallen-angel-wing/",
+   "verified": false,
+   "note": "ช่อง 1–2 เปิดตามตีบวก (+0 / +7), ช่อง 3 ต้อง +9; ค่าที่มาจากรูปในหน้าเว็บยังไม่ได้ตรวจ (ASPD 1–3 ตีความเป็น Attack Delay 1–3, 'MATK+30' ยังไม่พบไอเทม)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 7,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 2,
+     "minRefine": 9,
+     "options": [
+      4821,
+      4828,
+      4835,
+      4866,
+      4868,
+      4801,
+      4807,
+      4895,
+      4763,
+      4799,
+      4907,
+      4765
+     ]
+    }
+   ]
+  },
+  "20833": {
+   "name": "Fallen Angel Wing",
+   "source": "https://roc.gnjoy.in.th/promotion/how-to-enchant-fallen-angel-wing/",
+   "verified": false,
+   "note": "ช่อง 1–2 เปิดตามตีบวก (+0 / +7), ช่อง 3 ต้อง +9; ค่าที่มาจากรูปในหน้าเว็บยังไม่ได้ตรวจ (ASPD 1–3 ตีความเป็น Attack Delay 1–3, 'MATK+30' ยังไม่พบไอเทม)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 7,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 2,
+     "minRefine": 9,
+     "options": [
+      4821,
+      4828,
+      4835,
+      4866,
+      4868,
+      4801,
+      4807,
+      4895,
+      4763,
+      4799,
+      4907,
+      4765
+     ]
+    }
+   ]
+  },
+  "480307": {
+   "name": "Fallen Angel Wing",
+   "source": "https://roc.gnjoy.in.th/promotion/how-to-enchant-fallen-angel-wing/",
+   "verified": false,
+   "note": "ช่อง 1–2 เปิดตามตีบวก (+0 / +7), ช่อง 3 ต้อง +9; ค่าที่มาจากรูปในหน้าเว็บยังไม่ได้ตรวจ (ASPD 1–3 ตีความเป็น Attack Delay 1–3, 'MATK+30' ยังไม่พบไอเทม)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 7,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 2,
+     "minRefine": 9,
+     "options": [
+      4821,
+      4828,
+      4835,
+      4866,
+      4868,
+      4801,
+      4807,
+      4895,
+      4763,
+      4799,
+      4907,
+      4765
+     ]
+    }
+   ]
+  },
+  "480308": {
+   "name": "Fallen Angel Wing",
+   "source": "https://roc.gnjoy.in.th/promotion/how-to-enchant-fallen-angel-wing/",
+   "verified": false,
+   "note": "ช่อง 1–2 เปิดตามตีบวก (+0 / +7), ช่อง 3 ต้อง +9; ค่าที่มาจากรูปในหน้าเว็บยังไม่ได้ตรวจ (ASPD 1–3 ตีความเป็น Attack Delay 1–3, 'MATK+30' ยังไม่พบไอเทม)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 3,
+     "minRefine": 7,
+     "options": [
+      4809,
+      4808,
+      4820,
+      4812,
+      4826,
+      4827,
+      4832,
+      4833,
+      4834,
+      4863,
+      4864,
+      4865,
+      4861,
+      4862,
+      4867,
+      4870,
+      4800,
+      4871,
+      4869,
+      4872,
+      4873,
+      4702,
+      4703,
+      4704,
+      4722,
+      4723,
+      4724,
+      4712,
+      4713,
+      4714,
+      4752,
+      4753,
+      4754,
+      4731,
+      4732,
+      4733,
+      4742,
+      4743,
+      4744
+     ]
+    },
+    {
+     "position": 2,
+     "minRefine": 9,
+     "options": [
+      4821,
+      4828,
+      4835,
+      4866,
+      4868,
+      4801,
+      4807,
+      4895,
+      4763,
+      4799,
+      4907,
+      4765
+     ]
+    }
+   ]
+  },
+  "5744": {
+   "name": "Capricorn Crown",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "401198": {
+   "name": "Capricorn Crown",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "5512": {
+   "name": "Aquarius Diadem",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "401244": {
+   "name": "Aquarius Diadem",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "5514": {
+   "name": "Pisces Diadem",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "401288": {
+   "name": "Pisces Diadem",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "5545": {
+   "name": "Aries Diadem",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  },
+  "5549": {
+   "name": "Taurus Diadem",
+   "source": "https://roc.gnjoy.in.th/event/enchant-option-zodiac-hat/",
+   "verified": false,
+   "note": "ออปชันต่อราศีอยู่ในรูปภาพ — ยังไม่ได้กรอก (options = null → เลือกได้ทุก enchant)",
+   "slots": [
+    {
+     "position": 4,
+     "minRefine": 0,
+     "options": null
+    },
+    {
+     "position": 3,
+     "minRefine": 0,
+     "options": null,
+     "requiresPrevious": true
+    }
+   ]
+  }
+ }
+}

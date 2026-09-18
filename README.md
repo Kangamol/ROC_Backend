@@ -89,6 +89,7 @@ equipment in the same position. Weapons/shields are not rendered yet.
 | Method | Path | Notes |
 |---|---|---|
 | GET | `/api/jobs` | per-job base HP/SP per level, ASPD per weapon, job-level stat bonuses, max weight (`data/jobs.json`, built by `tools/build_job_data.py` from rAthena **pre-re** job tables — job data only, never items) |
+| GET | `/api/enchant-pools` | NPC enchant rules per item (`data/enchant_pools.json`, hand-maintained from Gnjoy pages — the client has no enchant data). Enchants occupy card positions 4 → 3 → 2, like the game; items not listed fall back to the generic Hidden Enchant (STR–LUK +1~+3) |
 | GET | `/api/meta` | counts per itemType / equipLocation |
 | GET | `/api/items` | `search`, `type`, `subType`, `location`, `cardLocation`, `slots`, `limit`, `offset` |
 | GET | `/api/items/:id` | full item incl. description + parsed bonuses |

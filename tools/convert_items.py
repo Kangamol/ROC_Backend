@@ -143,6 +143,7 @@ def classify(item_id, typ, head_locs, card_loc, is_costume=False, def_=None, nam
     `is_costume` is the client's own costume flag (iteminfo `costume = true`); it is
     reliable for garment costumes whose description says "ประเภท : Garment"."""
     t = norm_type(typ)
+    if 4700 <= item_id < 5000: return 'CARD', 'ENCHANT', []   # NPC enchant options (STR+1, Fighting Spirit …) — never a real card
     if t in ('card', 'การ์ด') or card_loc and 4000 <= item_id < 5000:
         return 'CARD', 'CARD', []
     if is_costume and t in ('garment', 'headgear', '') and (name.lower().startswith('costume') or not def_):

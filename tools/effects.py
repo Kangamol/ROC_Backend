@@ -333,7 +333,8 @@ def _parse_clause(line):
         targets = _targets(text)
         kind, tgt = targets[0] if targets else (None, None)
         dk = _kind(text)
-        is_resist = re.search(r'ที่ได้รับ|ได้รับจาก|ความเสียหายจาก|ทนทาน|ต้านทาน|ลด\s*Damage\s*(?:จาก|ที่)|Damage\s*ที่ได้รับ|ลดค่าความเสียหาย|ลดความเสียหาย|ลดพลังโจมตีจาก|ป้องกันการโจมตี|ลดดาเมจ', text)
+        is_resist = re.search(r'ที่ได้รับ|ได้รับจาก|ทนทาน|ต้านทาน|ลด\s*Damage\s*(?:จาก|ที่)|Damage\s*ที่ได้รับ|ลดค่าความเสียหาย|ลดความเสียหาย|ลดพลังโจมตีจาก|ป้องกันการโจมตี|ลดดาเมจ', text) \
+            or (re.search(r'ความเสียหายจาก', text) and re.search(r'ลด|ป้องกัน', text))   # "เพิ่มค่าความเสียหายจากการโจมตีระยะไกลขึ้น 2%" is damage dealt
         is_ignore = re.search(r'เพิกเฉย|เผิกเฉย|ไม่สนใจ|ลดค่าพลังป้องกัน|ลดพลังป้องกัน|ทะลุ(?:ทะลวง)?พลังป้องกัน|Ignore', text, re.I)
         # "เพิ่ม Damage ที่ได้รับจาก…" = takes MORE damage → negative resistance
         if re.search(r'เพิ่ม\s*(?:Damage|ดาเมจ|ความเสียหาย)\s*ที่ได้รับ', text) and not re.search(r'ลด', text): pct = -abs(pct)
