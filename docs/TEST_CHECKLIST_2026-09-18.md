@@ -35,6 +35,7 @@ cd ../web && bun install && bun run dev
 | 1.9 | Infinity Intelligence Boots +11 + Costume Garment ใส่ **Casting Stone (Garment)** | Fixed Cast (items) = **−1.0 วินาที** (0.5 + 0.5) |
 | 1.10 | Fenrir Card (Fixed 70%) + อีกชิ้นที่มี Fixed % | Fixed Cast % ใช้ค่า**สูงสุด**ตัวเดียว ไม่บวกกัน (วินาทีบวกกันได้) |
 | 1.11 | Costume Upper ใส่ **Champion Stone (Upper)** | ไม่รวมในผลรวม แต่โชว์ในกล่อง "โบนัสตามเลเวลสกิล — ยังไม่รวมในผลรวม": `[ทุก ๆ 1 Lv ของ Iron Hand] +2 ATK` |
+| 1.13 | ใส่ **Drake Card** (#4137) ในอาวุธ | Equipment Status กลุ่ม Combat แสดง `✓ ยกเลิกโทษขนาดอาวุธ (ตีทุกขนาด 100%)` — เป็นธงแสดงผล ยังไม่ถูกใช้คำนวณดาเมจ (โปรแกรมยังไม่มีเป้าหมาย) · Madogum +9 / Piamette Hood +12 / Queen Anz Revenge ให้ธงเดียวกัน · Purified Knight's Shield แถว 3 มีตัวเลือก "Negates size penalty" |
 | 1.12 | ดูสี | ค่าบวก = เขียว, ค่าลบ = แดง ทั้ง Equipment Status, แถว Cast/Delay ใน Stats, และตัวเลขโบนัสข้างสเตตัส |
 
 ## 2. Enchant NPC
