@@ -73,7 +73,7 @@ cd ../web && bun install && bun run dev
 |---|---|---|
 | 3.1 | เลือก **Awakened High Wizard** | Base Lv กรอกได้ถึง 120, Job 75 (hint "สูงสุด 120/75"), sprite = High Wizard |
 | 3.2 | Base Lv 100 ขึ้นไป | slider สเตตัสไปถึง **120** (ตามที่พี่แจ้ง — หน้าเว็บพิมพ์ 130 ถ้าในเกมเป็น 130 บอกได้ แก้ตัวเลขเดียว); ลดเป็น Lv 99 → cap กลับเป็น 99 และค่าที่เกินถูกดึงลง |
-| 3.2b | เลือก **Kagerou / Oboro / Rebellion** (2nd Extended) | Base Lv ถึง 120, Job 60, สเตตัสถึง 120 เมื่อ Lv ≥ 100 · Rebellion มี sprite ของตัวเอง, Kagerou/Oboro ใช้ sprite Ninja (client ไม่มี) · HP/SP ช่วง 100–120 เป็นค่าประมาณจาก Ninja/Gunslinger |
+| 3.2b | เลือก **Kagerou / Oboro / Rebellion / Expanded Super Novice** (2nd Extended) | Base Lv ถึง 120, Job 60, สเตตัสถึง 120 เมื่อ Lv ≥ 100 · Rebellion มี sprite ของตัวเอง, Kagerou/Oboro ใช้ sprite Ninja, Expanded SN ใช้ sprite Super Novice (client ไม่มี) · HP/SP ช่วง 100–120 เป็นค่าประมาณจาก Ninja/Gunslinger |
 | 3.3 | สลับกลับเป็น High Wizard ขณะ Lv 120 | Lv ถูกดึงลง 99 / Job 70 |
 | 3.4 | Awakened HW Lv120 AGI/DEX/INT 120 มือเปล่า | ASPD ≈ 184 (cap 193), HP ≈ 4,880 / SP ≈ 2,570 โดยประมาณ ก่อนใส่ของ — **HP/SP ช่วง Lv 100–120 เป็นค่าประมาณ** โปรดเทียบกับในเกมแล้วจดค่าจริงมา (บอก Lv, VIT, INT, MaxHP, MaxSP ถอดของ) |
 | 3.5 | แถบแต้มสเตตัส | Lv99 อาชีพ High "มี 1,325", อาชีพอื่น/Awakened "มี 1,273", Awakened Lv120 "มี 1,765" — เกินแล้วเป็นสีแดง |
@@ -83,7 +83,7 @@ cd ../web && bun install && bun run dev
 
 - HP/SP จริงของ Awakened ที่ Lv 100 / 110 / 120 (สัก 1–2 อาชีพ)
 - Job bonus stat ที่ Job 71–75 (Awakened) และ 51–60 ของ Kagerou/Oboro/Rebellion
-- ยืนยัน: 1st Extended (Ninja, Gunslinger, Taekwon, Soul Linker, Star Gladiator, Super Novice) ยังเป็น Lv 99 / สเตตัส 99 ใช่ไหม และมี Star Emperor / Soul Reaper / Expanded Super Novice บน Gnjoy ไหม (client มี sprite ของ Star Emperor, Soul Reaper)
+- (ยืนยันแล้ว) 1st Extended ยังเป็น Lv 99; 2nd Extended บน Gnjoy = Kagerou, Oboro, Rebellion, Expanded Super Novice — Job สูงสุดของ Expanded SN ใช้ 60 เหมือน Kagerou ถ้าไม่ใช่บอกได้
 - Fallen Angel Wing: ตาราง Diabolus Manteau ยืนยันโครงสร้างเดียวกันแล้ว (ASPD 1–3 = Attack Delay) เหลือแค่ "MATK+30" ในช่อง 3 คือไอเทมตัวไหน
 - Knight's Shield แถว 3: "Negates size penalty" ยังไม่รองรับ (ไม่มี key)
 - Awakened Whitesmith/Creator: ตาราง ASPD จากในเกม

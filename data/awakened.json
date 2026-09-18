@@ -395,7 +395,7 @@
   }
  },
  "extended": {
-  "_source": "https://roc.gnjoy.in.th/patch/ragnarok-online-classic-update-2nd-high-extended/ (Kagerou/Oboro: Ninja 99/70 → unlock 120/60)",
+  "_source": "https://roc.gnjoy.in.th/patch/ragnarok-online-classic-update-2nd-high-extended/ (Kagerou/Oboro: Ninja 99/70 → unlock 120/60) | user 2026-09-18: 2nd Extended on Gnjoy = Kagerou, Oboro, Rebellion, Expanded Super Novice (no Star Emperor / Soul Reaper); 1st Extended stay 99/70/99",
   "caps": {
    "baseLevel": 120,
    "jobLevel": 60,
@@ -413,6 +413,9 @@
    },
    "Rebellion": {
     "base": "Gunslinger"
+   },
+   "Expanded Super Novice": {
+    "base": "Super Novice"
    }
   }
  }

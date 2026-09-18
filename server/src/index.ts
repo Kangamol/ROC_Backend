@@ -1,6 +1,7 @@
 import { Elysia, t } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { staticPlugin } from "@elysiajs/static";
+import { existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import { prisma } from "./db";
 import { spriteRoutes } from "./sprites";
@@ -67,11 +68,8 @@ const buildBody = t.Object({
 
 // Per-job tables (base HP/SP, ASPD, job-level stat bonuses) built by tools/build_job_data.py
 const JOBS_PATH = resolve(import.meta.dir, "../../data/jobs.json");
-const jobs: Record<string, any> = (await Bun.file(JOBS_PATH).exists()) ? await Bun.file(JOBS_PATH).json() : {};
-
-// ---- Awakened classes (Gnjoy, 2026): derived from the base class tables + data/awakened.json ----------------
 const AWAKENED_PATH = resolve(import.meta.dir, "../../data/awakened.json");
-const awakened: any = (await Bun.file(AWAKENED_PATH).exists()) ? await Bun.file(AWAKENED_PATH).json() : null;
+
 /** Continue a per-level table past its last entry with a quadratic fitted to the last 20 points (pre-re HP grows quadratically, SP linearly). */
 function extrapolate(arr: number[], to: number): number[] {
   const n = arr.length;
@@ -96,56 +94,45 @@ function extrapolate(arr: number[], to: number): number[] {
   return out;
 }
 /** Derive a class entry from its base class: HP/SP continued to the new cap, own limits attached. */
-function deriveClass(name: string, def: any, caps: any, flags: Record<string, unknown>) {
+function deriveClass(jobs: Record<string, any>, name: string, def: any, caps: any, flags: Record<string, unknown>) {
   const base = jobs[def.base];
   if (!base) return;
-  jobs[name] = {
-    ...base,
-    key: name,
-    baseClass: def.base,
-    ...flags,
-    hp: extrapolate(base.hp, caps.baseLevel),
-    sp: extrapolate(base.sp, caps.baseLevel),
-    hpApproxFrom: base.hp.length + 1,
-    caps,
-  };
+  jobs[name] = { ...base, key: name, baseClass: def.base, ...flags, hp: extrapolate(base.hp, caps.baseLevel), sp: extrapolate(base.sp, caps.baseLevel), hpApproxFrom: base.hp.length + 1, caps };
   return jobs[name];
 }
-if (awakened?.extended) {
-  // 2nd Extended classes (Kagerou / Oboro / Rebellion): Lv 120 / Job 60, stats to 120 from Lv 100
-  for (const [name, def] of Object.entries<any>(awakened.extended.classes)) deriveClass(name, def, awakened.extended.caps, { extended: true });
-}
-if (awakened) {
-  const caps = awakened.caps;
-  for (const [name, def] of Object.entries<any>(awakened.classes)) {
-    const base = jobs[def.base];
-    if (!base) continue;
-    const aspd: Record<string, number> = { ...base.aspd };
-    if (def.aspd) {
-      // page gives bare-hand base ASPD + per-weapon penalty; the engine wants attack delay = (200 - ASPD) * 10
-      aspd.NONE = (200 - def.aspd.base) * 10;
-      for (const [w, pen] of Object.entries<number>(def.aspd.penalty)) {
-        if (w === "SHIELD") aspd.SHIELD = -pen * 10; // added to the delay when a shield is worn
-        else aspd[w] = (200 - (def.aspd.base + pen)) * 10;
-      }
-    }
-    jobs[name] = {
-      ...base,
-      key: name,
-      baseClass: def.base,
-      awakened: true,
-      hp: extrapolate(base.hp, caps.baseLevel),
-      sp: extrapolate(base.sp, caps.baseLevel),
-      hpApproxFrom: base.hp.length + 1,
-      aspd,
-      aspdApprox: !def.aspd,
-      caps,
-    };
+
+/** jobs.json + the classes derived from data/awakened.json. Rebuilt whenever either file changes, so data edits need no restart. */
+let jobsCache: { stamp: string; jobs: Record<string, any>; awakened: any } | undefined;
+async function loadJobs() {
+  const stamp = [JOBS_PATH, AWAKENED_PATH].map((p) => (existsSync(p) ? statSync(p).mtimeMs : 0)).join(":");
+  if (jobsCache?.stamp === stamp) return jobsCache;
+  const jobs: Record<string, any> = existsSync(JOBS_PATH) ? await Bun.file(JOBS_PATH).json() : {};
+  const awakened: any = existsSync(AWAKENED_PATH) ? await Bun.file(AWAKENED_PATH).json() : null;
+  if (awakened?.extended) {
+    // 2nd Extended classes (Kagerou / Oboro / Rebellion / Expanded Super Novice): Lv 120 / Job 60, stats to 120 from Lv 100
+    for (const [name, def] of Object.entries<any>(awakened.extended.classes)) deriveClass(jobs, name, def, awakened.extended.caps, { extended: true });
   }
+  if (awakened) {
+    const caps = awakened.caps;
+    for (const [name, def] of Object.entries<any>(awakened.classes)) {
+      const base = jobs[def.base];
+      if (!base) continue;
+      const aspd: Record<string, number> = { ...base.aspd };
+      if (def.aspd) {
+        // page gives bare-hand base ASPD + per-weapon penalty; the engine wants attack delay = (200 - ASPD) * 10
+        aspd.NONE = (200 - def.aspd.base) * 10;
+        for (const [w, pen] of Object.entries<number>(def.aspd.penalty)) {
+          if (w === "SHIELD") aspd.SHIELD = -pen * 10; // added to the delay when a shield is worn
+          else aspd[w] = (200 - (def.aspd.base + pen)) * 10;
+        }
+      }
+      deriveClass(jobs, name, def, caps, { awakened: true, aspd, aspdApprox: !def.aspd });
+    }
+  }
+  jobsCache = { stamp, jobs, awakened };
+  return jobsCache;
 }
-const ENCHANT_PATH = resolve(import.meta.dir, "../../data/enchant_pools.json");
-/** Read on every request (a few KB) so edits to the hand-maintained table show up without restarting the API. */
-const enchantPools = async () => ((await Bun.file(ENCHANT_PATH).exists()) ? Bun.file(ENCHANT_PATH).json() : { default: null, items: {} });
+const jobs = (await loadJobs()).jobs;
 if (!Object.keys(jobs).length) console.warn(`jobs: ${JOBS_PATH} missing — run tools/build_job_data.py (engine falls back to approximations)`);
 
 const app = new Elysia()
@@ -153,9 +140,9 @@ const app = new Elysia()
   .use(staticPlugin({ assets: ASSETS_DIR, prefix: "/assets" }))
   .use(spriteRoutes)
   .get("/api/health", () => ({ ok: true }))
-  .get("/api/jobs", () => jobs)
+  .get("/api/jobs", async () => (await loadJobs()).jobs)
   // Awakened-class rules: level / stat / ASPD caps and the cumulative stat-point tables
-  .get("/api/awakened", () => awakened ?? { caps: null, statPoints: null, classes: {} })
+  .get("/api/awakened", async () => (await loadJobs()).awakened ?? { caps: null, statPoints: null, classes: {} })
   // NPC enchant rules per item (hand-maintained data/enchant_pools.json; the client has no enchant data)
   .get("/api/enchant-pools", () => enchantPools())
 
